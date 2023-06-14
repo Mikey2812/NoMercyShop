@@ -7,6 +7,7 @@ import {
     CHANGE_TAB,
     CHANGE_PAGE,
     SET_MODAL_DATA,
+    IS_EDIT,
     // WATCH_MODAL,
     ADD_MODAL,
     EDIT_MODAL,
@@ -22,7 +23,7 @@ import {
     DELETE_CATEGORY_BEGIN,
     DELETE_CATEGORY_ERROR,
     DELETE_CATEGORY_SUCCESS,
-    GET_DATAS_BEGIN,GET_DATAS_ERROR,GET_DATAS_SUCCESS, CREATE_DATA_BEGIN, CREATE_DATA_SUCCESS,
+    GET_DATAS_BEGIN,GET_DATAS_ERROR,GET_DATAS_SUCCESS, CREATE_DATA_BEGIN, CREATE_DATA_SUCCESS, CREATE_DATA_ERROR,
 } from './actions';
 
 const reducer = (state, action) => {
@@ -191,13 +192,32 @@ const reducer = (state, action) => {
     }
 
     if (action.type === CREATE_DATA_BEGIN) {
-        return { ...state, isLoading: true};
+        return { ...state, isLoading: true, isError: false,};
     }
       
     if (action.type === CREATE_DATA_SUCCESS) {
         return {
             ...state,
             isLoading: false,
+            isError: false,
+        };
+    }
+
+    if (action.type === CREATE_DATA_ERROR) {
+        return {
+            ...state,
+            isLoading: false,
+            isError: true,
+            message: action.payload.message,
+        };
+    }
+
+    if (action.type === IS_EDIT) {
+        return {
+            ...state,
+            isEdit: true,
+            action: 'edit',
+            editData: action.payload.data,
         };
     }
 

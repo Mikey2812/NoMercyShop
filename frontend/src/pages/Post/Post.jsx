@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import PostsContainer from '../../components/Post/PostsContainer';
 const Post = () => {
     return (
         <div>
@@ -31,7 +31,7 @@ const Post = () => {
                         <div className="container-fluid">
                             <div className="row">
                                 <div className="col-12">
-                                    {/* <ProductsContainer/> */}
+                                    <PostsContainer/>
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,39 @@
-import React from 'react'
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup'
+import AuthService from '../services/auth.service';
+import { toast } from 'react-toastify';
 
 const Login = () => {
+    const navigate = useNavigate();
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+        },
+
+        validationSchema: Yup.object().shape({
+            email: Yup.string()
+                .required('Email is required')
+                .email('Wrong email format'),
+            password: Yup.string()
+                .required('Password is required')
+                .min(8, 'Password as least 8 characters'),
+        }),
+
+        onSubmit: async values => {
+            try {
+                await AuthService.login(values);
+                navigate('/');
+                toast.success('Login successful');
+            }
+            catch (error) {
+                toast.error(error.response.data.message);
+            }
+        }
+    });
+
     return (
         <div>
             {/* START MAIN CONTENT */}
@@ -15,74 +48,86 @@ const Login = () => {
                             <div className="heading_s1">
                             <h3>Login</h3>
                             </div>
-                            <form method="post">
-                            <div className="form-group mb-3">
-                                <input
-                                type="text"
-                                required=""
-                                className="form-control"
-                                name="email"
-                                placeholder="Your Email"
-                                />
-                            </div>
-                            <div className="form-group mb-3">
-                                <input
-                                className="form-control"
-                                required=""
-                                type="password"
-                                name="password"
-                                placeholder="Password"
-                                />
-                            </div>
-                            <div className="login_footer form-group mb-3">
-                                <div className="chek-form">
-                                <div className="custome-checkbox">
+                            <form onSubmit={formik.handleSubmit}>
+                                <div className="form-group mb-3">
                                     <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    name="checkbox"
-                                    id="exampleCheckbox1"
-                                    defaultValue=""
+                                        type="text"
+                                        className="form-control"
+                                        name="email"
+                                        placeholder="Your Email"
+                                        value={formik.values.email}
+                                        onChange={formik.handleChange}
                                     />
-                                    <label
-                                    className="form-check-label"
-                                    htmlFor="exampleCheckbox1"
+                                    {   formik.errors.email &&
+                                            formik.touched.email &&
+                                            (<span className='text-danger'>{formik.errors.email}</span>) }
+                                </div>
+                                <div className="form-group mb-3">
+                                    <input
+                                        className="form-control"
+                                        required=""
+                                        type="password"
+                                        name="password"
+                                        placeholder="Password"
+                                        value={formik.values.password}
+                                        onChange={formik.handleChange}
+                                    />
+                                    {   formik.errors.password &&
+                                            formik.touched.password &&
+                                            (<span className='text-danger'>{formik.errors.password}</span>) }
+                                </div>
+                                <div className="login_footer form-group mb-3">
+                                    <div className="chek-form">
+                                    <div className="custome-checkbox">
+                                        <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        name="checkbox"
+                                        id="exampleCheckbox1"
+                                        defaultValue=""
+                                        />
+                                        <label
+                                        className="form-check-label"
+                                        htmlFor="exampleCheckbox1"
+                                        >
+                                        <span>Remember me</span>
+                                        </label>
+                                    </div>
+                                    </div>
+                                    <Link to='/forgot-password'>Forgot password?</Link>
+                                </div>
+                                <div className="form-group mb-3">
+                                    <button
+                                    type="submit"
+                                    className="btn btn-fill-out btn-block"
+                                    name="login"
                                     >
-                                    <span>Remember me</span>
-                                    </label>
+                                    Log in
+                                    </button>
                                 </div>
-                                </div>
-                                <a href="#">Forgot password?</a>
-                            </div>
-                            <div className="form-group mb-3">
-                                <button
-                                type="submit"
-                                className="btn btn-fill-out btn-block"
-                                name="login"
-                                >
-                                Log in
-                                </button>
-                            </div>
                             </form>
                             <div className="different_login">
                             <span> or</span>
                             </div>
                             <ul className="btn-login list_none text-center">
                             <li>
-                                <a href="#" className="btn btn-facebook">
-                                <i className="ion-social-facebook" />
-                                Facebook
-                                </a>
+                                <Link to={'/facebook'} className="btn btn-facebook">
+                                    <i className="ion-social-facebook" />
+                                    Facebook
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className="btn btn-google">
-                                <i className="ion-social-googleplus" />
-                                Google
-                                </a>
+                                <Link to={'/facebook'} className="btn btn-google">
+                                    <i className="ion-social-googleplus" />
+                                    Google
+                                </Link>
                             </li>
                             </ul>
                             <div className="form-note text-center">
-                            Don't Have an Account? <a href="signup.html">Sign up now</a>
+                                Don't Have an Account? <Link to={'/register'}>Sign up now</Link>
+                            </div>
+                            <div className="form-note text-center">
+                                Or <Link to={'/'}>Go To Home</Link>
                             </div>
                         </div>
                         </div>

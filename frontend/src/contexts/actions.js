@@ -6,6 +6,7 @@ export const MESSAGE = 'MESSAGE';
 export const CHANGE_TAB = 'CHANGE_TAB';
 export const CHANGE_PAGE = 'CHANGE_PAGE';
 
+export const IS_EDIT = 'IS_EDIT';
 
 export const SET_MODAL_DATA = 'SET_MODAL_DATA';
 export const WATCH_MODAL = 'WATCH_MODAL';

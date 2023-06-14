@@ -9,6 +9,7 @@ import {
     CHANGE_PAGE,
     SET_MODAL_DATA,
     // WATCH_MODAL,
+    IS_EDIT,
     ADD_MODAL,
     EDIT_MODAL,
     SETUP_USER_BEGIN,
@@ -28,6 +29,7 @@ import {
     DELETE_DATA_BEGIN,DELETE_DATA_SUCCESS,DELETE_DATA_ERROR,
 } from './actions';
 import { data } from 'jquery';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 // import { data } from 'jquery';
 
 export const initialState = {
@@ -37,6 +39,7 @@ export const initialState = {
     alertType: '',
     showModal: false,
     isEdit: false,
+    isError: false,
     modalData: [],
     user: null,
     token: localStorage.getItem('token') || null,
@@ -47,7 +50,8 @@ export const initialState = {
     limit: 10,
     page: 1,
     numOfPages: 0,
-    srcImg: 'http://localhost:8080/uploads'
+    srcImg: 'http://localhost:8080/uploads/',
+    action: 'watch',
 };
     const AppContext = React.createContext();
 
@@ -70,7 +74,7 @@ export const initialState = {
                 return response;
             },
             (error) => {
-                    console.log(error.response);
+                    // console.log(error.response);
                 if (error.response.status === 401) {
                     console.log('AUTH ERROR');
                 }
@@ -148,10 +152,9 @@ export const initialState = {
                 if (error.response.status === 401) return;
                 dispatch({
                     type: CREATE_DATA_ERROR,
-                    payload: { msg: error.response.data.msg },
+                    payload: { message: error.response.data.message },
                 });
             }
-            // getCategories();
         };
         
 
@@ -251,6 +254,15 @@ export const initialState = {
             }
         };
 
+        const formEdit = async (data) => {
+            console.log(data);
+            dispatch({
+                type: IS_EDIT,
+                payload: { data: data },
+            });
+            // dispatch
+        }
+
         const addUserToLocalStorage = ({ user, token, location }) => {
             localStorage.setItem('user', JSON.stringify(user));
             localStorage.setItem('token', token);
@@ -281,6 +293,7 @@ export const initialState = {
                 deleteCategory,
                 createData,
                 getDatas,
+                formEdit,
             }}
             >
             {children}

@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
     return (
@@ -83,7 +84,7 @@ const Header = () => {
                 <div className="middle-header dark_skin">
                 <div className="container">
                     <div className="nav_block">
-                    <a className="navbar-brand" href="index.html">
+                    <Link className="navbar-brand" to={'/'}>
                         <img
                         className="logo_light"
                         src="assets/images/logo_light.png"
@@ -94,7 +95,7 @@ const Header = () => {
                         src="assets/images/logo_dark.png"
                         alt="logo"
                         />
-                    </a>
+                    </Link>
                     <div className="product_search_form radius_input search_form_btn">
                         <form>
                         <div className="input-group">
@@ -124,28 +125,23 @@ const Header = () => {
                     </div>
                     <ul className="navbar-nav attr-nav align-items-center">
                         <li>
-                        <a href="#" className="nav-link">
-                            <i className="linearicons-user" />
-                        </a>
-                        </li>
-                        <li>
-                        <a href="#" className="nav-link">
-                            <i className="linearicons-heart" />
-                            <span className="wishlist_count">0</span>
-                        </a>
+                            <a href="#" className="nav-link">
+                                <i className="linearicons-heart" />
+                                <span className="wishlist_count">0</span>
+                            </a>
                         </li>
                         <li className="dropdown cart_dropdown">
-                        <a
-                            className="nav-link cart_trigger"
-                            href="#"
-                            data-bs-toggle="dropdown"
-                        >
-                            <i className="linearicons-bag2" />
-                            <span className="cart_count">2</span>
-                            <span className="amount">
-                            <span className="currency_symbol">$</span>159.00
-                            </span>
-                        </a>
+                            <a
+                                className="nav-link cart_trigger"
+                                href="#"
+                                data-bs-toggle="dropdown"
+                            >
+                                <i className="linearicons-bag2" />
+                                <span className="cart_count">2</span>
+                                <span className="amount">
+                                <span className="currency_symbol">$</span>159.00
+                                </span>
+                            </a>
                         <div className="cart_box cart_right dropdown-menu dropdown-menu-right">
                             <ul className="cart_list">
                             <li>
@@ -210,6 +206,12 @@ const Header = () => {
                             </p>
                             </div>
                         </div>
+                        </li>
+                        <li>
+                            <Link to={'/login'} className="nav-link">
+                                <i className="linearicons-user" />
+                                <span> Login</span>
+                            </Link>
                         </li>
                     </ul>
                     </div>
@@ -961,7 +963,7 @@ const Header = () => {
                         </button>
                         <div className="pr_search_icon">
                             <a
-                            href="javascript:void(0);"
+                            href="#"
                             className="nav-link pr_search_trigger"
                             >
                             <i className="linearicons-magnifier" />
@@ -1719,7 +1721,7 @@ const Header = () => {
                         </div>
                         <div className="contact_phone contact_support">
                             <i className="linearicons-phone-wave" />
-                            <span>123-456-7689</span>
+                            <span>0943-877-608</span>
                         </div>
                         </nav>
                     </div>

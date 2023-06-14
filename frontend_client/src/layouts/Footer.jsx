@@ -21,16 +21,16 @@ const Footer = () => {
                         </p>
                         <ul className="contact_info">
                             <li>
-                            <i className="ti-location-pin" />
-                            <p>123 Street, Old Trafford, NewYork, USA</p>
+                                <i className="ti-location-pin" />
+                                <p>Da Nang city</p>
                             </li>
                             <li>
-                            <i className="ti-email" />
-                            <a href="mailto:info@sitename.com">info@sitename.com</a>
+                                <i className="ti-email" />
+                                <a href="mailto:tranlequanghuy281201@gmail.com  ">tranlequanghuy281201@gmail.com</a>
                             </li>
                             <li>
-                            <i className="ti-mobile" />
-                            <p>+ 457 789 789 65</p>
+                                <i className="ti-mobile" />
+                                <p>+84 943 877 608</p>
                             </li>
                         </ul>
                         </div>

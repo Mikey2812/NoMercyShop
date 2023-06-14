@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useAppContext } from '../../contexts/appContext';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Validator from '../../utils/validator';
 
 const initialState = {
     title: '',
@@ -13,24 +16,51 @@ const FormPost = () => {
     const [values, setValues] = useState(initialState);
     const [avatar, setAvatar] = useState();
     const [errors, setErrors] = useState({});
-    const { isLoading, createData } = useAppContext();
+    const navigate = useNavigate();
+
+    const { isLoading, isError, isEdit, message, createData, editData } = useAppContext();
     const handleInput = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
         console.log(values);
     };
     const handlePreviewAvatar = (e) => {
-
         const file = e.target.files[0];
         file.preview = URL.createObjectURL(file);
         setAvatar(file);
         setValues({ ...values, avatar: file });
-        console.log(avatar);
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('submit');
-        createData('blogs', values);
+        const formData = new FormData();
+        formData.append('title', values.title);     
+        formData.append('description', values.description);     
+        formData.append('content', values.content);     
+        formData.append('avatar', values.avatar);
+        createData('posts', formData)
+        .then(() => {
+            console.log(isError);
+            if (isError) {
+                toast.error(message);
+            } else {
+                toast.success('Add new post Success!');
+                navigate('/posts');
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
     };
+    // useEffect(() => {
+    //     if(!editData) {
+    //         navigate('/posts');
+    //     }
+    //     else {
+    //         setValues(editData);
+    //     }
+    //     console.log('value la');
+    //     console.log(values);
+    // }, [editData])    
+
     return (
         <div>
             <form onSubmit={handleSubmit}>
@@ -43,6 +73,7 @@ const FormPost = () => {
                             placeholder="Enter title"
                             name='title'
                             onChange={handleInput}
+                            value={values.title}
                         />
                     </div>
                     <div className="form-group">
@@ -81,9 +112,10 @@ const FormPost = () => {
                 </div>
                 {/* /.card-body */}
                 <div className="card-footer">
-                    <button type="submit" className="btn btn-primary">
-                    Submit
+                    <button type="submit" className="btn btn-primary" disabled={isLoading}>
+                        {isEdit ? 'Edit Post' : 'Add New Post'}
                     </button>
+                    <button type='button' className='btn btn-secondary ms-3' onClick={() => {navigate('/posts')}}>Go back</button>
                 </div>
             </form>
         </div>

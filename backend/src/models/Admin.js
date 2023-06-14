@@ -30,13 +30,8 @@ import jwt from 'jsonwebtoken'
         password: {
             type: String,
             required: [true, 'Please provide password'],
-            minlength: 6,
+            minlength: 8,
             select: false,
-        },
-        location: {
-            type: String,
-            trim: true,
-            default: 'my city',
         },
     },{ timestamps: true })
 

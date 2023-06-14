@@ -31,6 +31,7 @@ const AdminRouter = () => {
                                 <Route path='products' element={<Product/>} />
                                 <Route path='posts' element={<Post/>} />
                                 <Route path='posts/add' element={<PostForm/>} />
+                                <Route path='posts/edit/:slug' element={<PostForm/>} />
                                 <Route path="*" element={<NotFoundPage />} />
                             </Routes>
                             <Footer/>

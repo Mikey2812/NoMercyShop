@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import FormPost from '../../components/Post/FormPost';
+import { useAppContext } from '../../contexts/appContext';
 
 const PostForm = () => {
+    const {isEdit} = useAppContext();
     return (
         <div>
             {/* Content Wrapper. Contains page content */}
@@ -12,7 +14,7 @@ const PostForm = () => {
                 <div className="container-fluid">
                 <div className="row mb-2">
                     <div className="col-sm-6">
-                    <h1>Add New Post</h1>
+                    <h1>{isEdit ? 'Edit Post' : 'Add New Post'}</h1>
                     </div>
                     <div className="col-sm-6">
                     <ol className="breadcrumb float-sm-right">
@@ -23,7 +25,7 @@ const PostForm = () => {
                             <Link to={'/posts'}>Post</Link>
                         </li>
                         <li className="breadcrumb-item active">
-                            Add new Post
+                            {isEdit ? 'Edit Post' : 'Add New Post'}
                         </li>
                     </ol>
                     </div>

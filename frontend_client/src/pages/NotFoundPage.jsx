@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const NotFoundPage = () => {
     return (
@@ -33,9 +34,9 @@ const NotFoundPage = () => {
                                 </button>
                                 </form>
                             </div>
-                            <a href="index.html" className="btn btn-fill-out">
+                            <Link to={'/'} className="btn btn-fill-out">
                                 Back To Home
-                            </a>
+                            </Link>
                             </div>
                         </div>
                         </div>
