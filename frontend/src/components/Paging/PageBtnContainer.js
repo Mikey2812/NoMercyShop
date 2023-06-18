@@ -4,11 +4,6 @@ import { useAppContext } from "../../contexts/appContext";
 const PageBtnContainer = () => {
   const { numOfPages, limit, page, changePage, totalValues } = useAppContext()
 
-    useEffect(() => {
-        console.log("change...");
-        console.log(page);
-    }, [page])
-
     const pages = Array.from({ length: numOfPages }, (_, index) => {
         return index + 1;
     })

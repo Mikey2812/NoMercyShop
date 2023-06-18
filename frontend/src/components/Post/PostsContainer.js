@@ -1,4 +1,4 @@
-import {React, useEffect} from 'react';
+import {React, memo, useEffect} from 'react';
 import PageBtnContainer from '../Paging/PageBtnContainer';
 import Post from './Post';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,7 +15,8 @@ const PostsContainer = () => {
         getDatas,
     } = useAppContext();
     useEffect(() => {
-        console.log('get');
+        console.log('..render');
+        console.log(page)
         getDatas('posts');
     }, [page]);
     return (
@@ -80,4 +81,4 @@ const PostsContainer = () => {
     )
 }
 
-export default PostsContainer
+export default memo (PostsContainer)

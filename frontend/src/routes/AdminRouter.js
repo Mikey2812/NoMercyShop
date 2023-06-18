@@ -14,7 +14,8 @@ import NotFoundPage from '../pages/NotFoundPage';
 import Category from '../pages/Category';
 import Product from '../pages/Product';
 import Post from '../pages/Post/Post';
-import PostForm from '../pages/Post/PostForm';
+import PostWatch from '../pages/Post/PostWatch';
+import PostAction from '../pages/Post/PostAction';
 const AdminRouter = () => {
     return (
         <div>
@@ -30,8 +31,9 @@ const AdminRouter = () => {
                                 <Route path="categories" element={<Category/>} />
                                 <Route path='products' element={<Product/>} />
                                 <Route path='posts' element={<Post/>} />
-                                <Route path='posts/add' element={<PostForm/>} />
-                                <Route path='posts/edit/:slug' element={<PostForm/>} />
+                                <Route path='posts/add' element={<PostAction/>} />
+                                <Route path='posts/:id' element={<PostWatch/>} />
+                                <Route path='posts/edit/:id' element={<PostAction/>} />
                                 <Route path="*" element={<NotFoundPage />} />
                             </Routes>
                             <Footer/>

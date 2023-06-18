@@ -1,6 +1,7 @@
 import React, { useState, useReducer, useContext } from 'react';
 import reducer from './reducer';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 import {
     DISPLAY_ALERT,
@@ -27,6 +28,7 @@ import {
     CREATE_DATA_BEGIN,CREATE_DATA_SUCCESS,CREATE_DATA_ERROR,
     GET_DATAS_BEGIN,GET_DATAS_SUCCESS,GET_DATAS_ERROR,
     DELETE_DATA_BEGIN,DELETE_DATA_SUCCESS,DELETE_DATA_ERROR,
+    CHANGE_STATUS_BEGIN, CHANGE_STATUS_SUCCESS, CHANGE_STATUS_ERROR, EDIT_DATA_BEGIN, EDIT_DATA_SUCCESS, EDIT_DATA_ERROR,
 } from './actions';
 import { data } from 'jquery';
 import { faL } from '@fortawesome/free-solid-svg-icons';
@@ -49,6 +51,7 @@ export const initialState = {
     categoryName: '',
     limit: 10,
     page: 1,
+    status: 0,
     numOfPages: 0,
     srcImg: 'http://localhost:8080/uploads/',
     action: 'watch',
@@ -80,7 +83,7 @@ export const initialState = {
                 }
                 return Promise.reject(error);
             }
-          );
+        );
         
         const displayAlert = () => {
             dispatch({ type: DISPLAY_ALERT });
@@ -157,6 +160,19 @@ export const initialState = {
             }
         };
         
+        const editData = async (_id, endPoint, data) => {
+            dispatch({ type: EDIT_DATA_BEGIN });
+            try {
+                await authFetch.post(`/${endPoint}/${_id}`, data);
+                dispatch({ type: EDIT_DATA_SUCCESS });
+            } catch (error) {
+                if (error.response.status === 401) return;
+                dispatch({
+                    type: EDIT_DATA_ERROR,
+                    payload: { message: error.response.data.message },
+                });
+            }
+        };
 
         const getCategories = async () => {
 
@@ -195,8 +211,27 @@ export const initialState = {
                     type: GET_DATAS_SUCCESS,
                     payload: {
                         values,
+                        type: 'multiple',
                         totalValues,
                         numOfPages,
+                    },
+                });
+            } catch (error) {
+                console.log(error.response);
+            }
+        }
+
+        const getDataByID = async (_id, endPoint) => {
+            let url = `/${endPoint}/${_id}`;
+            dispatch({ type: GET_DATAS_BEGIN });
+            try {
+                const { data } = await authFetch(url);
+                const { values } = data;
+                dispatch({
+                    type: GET_DATAS_SUCCESS,
+                    payload: {
+                        values,
+                        type: 'single',
                     },
                 });
             } catch (error) {
@@ -254,6 +289,52 @@ export const initialState = {
             }
         };
 
+        const deleteData = async (_id, endPoint) => {
+            // dispatch({ type: DELETE_CATEGORY_BEGIN });
+            try {
+                const { data } = await authFetch.delete(`/${endPoint}/${_id}`);
+                const { message } = data;
+                toast.success(message);
+                const {values} = state;
+                const index = values.findIndex(obj => obj._id === _id);
+                values.splice(index, 1);
+                dispatch({
+                    type: DELETE_DATA_SUCCESS,
+                    payload: {
+                        _id,
+                        values,
+                    },
+                });
+            } catch (error) {
+                if (error.response.status === 401) return;
+                toast.error(error.response.data.message);
+                dispatch({
+                    type: CHANGE_STATUS_ERROR,
+                });
+            }
+        };
+            
+        const changeStatus = async (_id, status, endPoint) => {
+                // dispatch({ type: CHANGE_STATUS_BEGIN });
+                try {
+                    const { data } = await authFetch.patch(`/${endPoint}/status/${_id}`, {status});
+                    const { message } = data;
+                    toast.success(message);
+                    dispatch({
+                        type: CHANGE_STATUS_SUCCESS,
+                        payload: {
+                            _id,
+                        },
+                    });
+                } catch (error) {
+                    if (error.response.status === 401) return;
+                    toast.error(error.response.data.message);
+                    dispatch({
+                        type: CHANGE_STATUS_ERROR,
+                    });
+                }
+        };  
+
         const formEdit = async (data) => {
             console.log(data);
             dispatch({
@@ -292,17 +373,23 @@ export const initialState = {
                 getCategories,
                 deleteCategory,
                 createData,
+                editData,
                 getDatas,
+                getDataByID,
                 formEdit,
+                changeStatus,
+                deleteData
             }}
             >
             {children}
             </AppContext.Provider>
         );
-    };
+        };
 // make sure use
 export const useAppContext = () => {
-  return useContext(AppContext);
-};
+    return useContext(AppContext);
+  };
+  
+  export { AppProvider };
 
-export { AppProvider };
+  

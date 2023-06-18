@@ -5,16 +5,10 @@ import reportWebVitals from './reportWebVitals';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Provider } from 'react-redux';
-import reducer from './reducers';
-import { legacy_createStore as createStore, applyMiddleware } from 'redux';
+// import reducer from './reducers';
+import store from './store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
-
-const store = createStore(
-    reducer,
-    // applyMiddleware(...middleware)
-)
 
 root.render(
     <React.StrictMode>

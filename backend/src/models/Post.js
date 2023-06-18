@@ -3,9 +3,10 @@ import slug from 'mongoose-slug-generator';
 
 mongoose.plugin(slug);
     const PostSchema = new mongoose.Schema({
+        created_By: {type: String},
         title: {
             type: String,
-            required: [true, 'Please provide title'],
+            required: [true, 'Please provide title'], 
         },
         slug: { type: String, slug: "title" },
         description: {type: String, required: [true, 'Please provide description']},
@@ -19,6 +20,6 @@ mongoose.plugin(slug);
             maxlength: 1,
             default: 1,
         },
-    },{ timestamps: true })
+    },{ timestamps: true });
 
 export default mongoose.model('Post', PostSchema);

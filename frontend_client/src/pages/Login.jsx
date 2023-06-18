@@ -1,12 +1,15 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch, connect } from 'react-redux';
 import { useFormik } from 'formik';
-import * as Yup from 'yup'
-import AuthService from '../services/auth.service';
+import * as Yup from 'yup';
+import { login } from '../actions/auth';
 import { toast } from 'react-toastify';
 
-const Login = () => {
+const Login = ({isLoading}) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { message } = useSelector(state => state.auth);
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -23,14 +26,22 @@ const Login = () => {
         }),
 
         onSubmit: async values => {
-            try {
-                await AuthService.login(values);
-                navigate('/');
-                toast.success('Login successful');
-            }
-            catch (error) {
-                toast.error(error.response.data.message);
-            }
+            dispatch(login(values))
+                .then(() => {
+                    navigate("/");
+                    toast.success('Login successful');
+                })
+                .catch((error) => {
+                    toast.error(error.response.data.message);
+                });
+            // try {
+            //     await AuthService.login(values);
+            //     navigate('/');
+            //     toast.success('Login successful');
+            // }
+            // catch (error) {
+            //     toast.error(error.response.data.message);
+            // }
         }
     });
 
@@ -47,6 +58,7 @@ const Login = () => {
                         <div className="padding_eight_all bg-white">
                             <div className="heading_s1">
                             <h3>Login</h3>
+                            {isLoading ? <p>Loading...</p> : null}
                             </div>
                             <form onSubmit={formik.handleSubmit}>
                                 <div className="form-group mb-3">
@@ -98,9 +110,10 @@ const Login = () => {
                                 </div>
                                 <div className="form-group mb-3">
                                     <button
-                                    type="submit"
-                                    className="btn btn-fill-out btn-block"
-                                    name="login"
+                                        type="submit"
+                                        className="btn btn-fill-out btn-block"
+                                        name="login"
+                                        disabled={isLoading}
                                     >
                                     Log in
                                     </button>
@@ -141,5 +154,13 @@ const Login = () => {
         </div>
     )
 }
+const mapStateToProps = (state) => ({
+    isLoading: state.auth.isLoading,
+    error: state.auth.error,
+});
+  
+const mapDispatchToProps = {
+    // login
+};
 
-export default Login
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

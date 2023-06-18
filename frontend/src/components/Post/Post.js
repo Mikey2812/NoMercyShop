@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faEdit, faEye, faTrash} from '@fortawesome/free-solid-svg-icons';
 import { useAppContext } from '../../contexts/appContext';
@@ -13,17 +13,18 @@ const Post = ({
     avatar,
     status,
 }) => {
-    const { srcImg, formEdit } = useAppContext();
+    const { srcImg, changeStatus, deleteData} = useAppContext();
     const navigate = useNavigate();
     const handleDeleteConfirmation = (_id) => {
-        // console.log(123123);
-        // const result = window.confirm('Are you sure you want to delete this Post?');
-        // if (result) {
-        //     if(deletePost(_id)){
-        //         toast.success(`${message}`);
-        //     }
-        // }
+        const result = window.confirm('Are you sure you want to delete this Post?');
+        if (result) {
+            deleteData(_id, 'posts');
+        }
     };
+    const handlechangeStatus = (_id) => {
+        (status === 0) ? status = 1 : status = 0;
+        changeStatus(_id, status, 'posts')
+    } 
     return (
         <tr>
             <td className='align-middle' style={{paddingLeft:"0.75rem"}}>{_id}</td>
@@ -32,14 +33,22 @@ const Post = ({
             <td className='align-middle'>{description}</td>
             <td className='align-middle'>{'Show more'}</td>
             <td className='align-middle'><img src={avatar ? (srcImg+'posts/'+avatar) : "/assets/img/NoImages.png"} style={{maxWidth:"200px", maxHeight:"200px"}}></img></td>
-            <td className='align-middle'>{(status === 1) ? <span className="badge text-bg-success">Active</span> : <span className="badge text-bg-danger">Block</span>}</td>
+            <td className='align-middle'>
+                <div onClick={()=>{handlechangeStatus(_id)}}>
+                    {
+                        (status === 1) ? 
+                        <span className="badge text-bg-success">Active</span> : 
+                        <span className="badge text-bg-danger">Block</span>
+                    }
+                </div>
+            </td>
             <td className='align-middle' style={{paddingRight:"0.75rem"}}>
-                <button className='btn btn-outline-success mx-2'>
+                <button className='btn btn-outline-success mx-2'
+                    onClick={()=>{navigate(`/posts/${_id}`)}}>
                         <FontAwesomeIcon icon={faEye} />
                 </button>
                 <button className='btn btn-outline-warning mx-2' onClick={() => {
-                    formEdit({_id, title, description, content});
-                    navigate(`/posts/edit/${slug}`);
+                    navigate(`/posts/edit/${_id}`);
                 }}>
                     <FontAwesomeIcon icon={faEdit} />
                 </button>
@@ -51,4 +60,4 @@ const Post = ({
     )
 }
 
-export default Post
+export default memo (Post)

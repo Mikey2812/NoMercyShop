@@ -6,6 +6,10 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import NotFoundPage from "./pages/NotFoundPage";
 import Register from "./pages/Register";
+import Blog from "./pages/Blog/Blog";
+import Profile from "./pages/Profile/Profile";
+import Contact from "./pages/Contact/Contact";
+
 function App() {
     return (
         <BrowserRouter>
@@ -17,6 +21,9 @@ function App() {
                         <Header/>
                         <Routes>
                             <Route index element={<Home />} />
+                            <Route path="/blogs" element={<Blog />} />
+                            <Route path="/contact" element={<Contact/>} />
+                            <Route path="/profile" element={<Profile/>} />
                             <Route path="/*" element={<NotFoundPage />} />
                         </Routes>
                         <Footer/>

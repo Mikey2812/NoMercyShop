@@ -108,8 +108,8 @@ const Home = () => {
                 >
                 <div className="carousel-inner">
                     <div
-                    className="carousel-item background_bg active"
-                    data-img-src="assets/images/banner16.jpg"
+                        className="carousel-item background_bg active"
+                        style={{backgroundImage: 'url("assets/images/banner16.jpg")'}}
                     >
                     <div className="banner_slide_content banner_content_inner">
                         <div className="container">
@@ -146,8 +146,8 @@ const Home = () => {
                     </div>
                     </div>
                     <div
-                    className="carousel-item background_bg"
-                    data-img-src="assets/images/banner17.jpg"
+                        className="carousel-item background_bg"
+                        style={{backgroundImage: 'url("assets/images/banner17.jpg")'}}
                     >
                     <div className="banner_slide_content banner_content_inner">
                         <div className="container">
@@ -184,8 +184,8 @@ const Home = () => {
                     </div>
                     </div>
                     <div
-                    className="carousel-item background_bg"
-                    data-img-src="assets/images/banner18.jpg"
+                        className="carousel-item background_bg"
+                        style={{backgroundImage: 'url("assets/images/banner18.jpg")'}}
                     >
                     <div className="banner_slide_content banner_content_inner">
                         <div className="container">

@@ -12,13 +12,13 @@ const initialState = {
     content: '',
     avatar: '',
 };
-const FormPost = () => {    
+const AddPost = () => {    
     const [values, setValues] = useState(initialState);
     const [avatar, setAvatar] = useState();
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 
-    const { isLoading, isError, isEdit, message, createData, editData } = useAppContext();
+    const { isLoading, isError, isEdit, message, createData } = useAppContext();
     const handleInput = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
         console.log(values);
@@ -50,16 +50,6 @@ const FormPost = () => {
             console.error(error);
         });
     };
-    // useEffect(() => {
-    //     if(!editData) {
-    //         navigate('/posts');
-    //     }
-    //     else {
-    //         setValues(editData);
-    //     }
-    //     console.log('value la');
-    //     console.log(values);
-    // }, [editData])    
 
     return (
         <div>
@@ -122,4 +112,4 @@ const FormPost = () => {
     )
 }
 
-export default FormPost
+export default AddPost
