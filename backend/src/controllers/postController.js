@@ -37,7 +37,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
         if(!values){
             res.status(StatusCodes.UNAUTHORIZED).json({message: `No post with id :${id}`});
         }
-        res.status(StatusCodes.OK).json({ values});
+        res.status(StatusCodes.OK).json({ values });
     };
 
     const editPost = async(req, res) => {

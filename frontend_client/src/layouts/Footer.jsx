@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
@@ -11,9 +12,9 @@ const Footer = () => {
                     <div className="col-lg-4 col-md-12 col-sm-12">
                         <div className="widget">
                         <div className="footer_logo">
-                            <a href="#">
-                            <img src="assets/images/logo_dark.png" alt="logo" />
-                            </a>
+                            <Link to='/'>
+                                <img src="/assets/images//logo_dark.png" alt="logo" />
+                            </Link>
                         </div>
                         <p className="mb-3">
                             If you are going to use of Lorem Ipsum need to be sure there
@@ -85,12 +86,12 @@ const Footer = () => {
                         <ul className="app_list">
                             <li>
                             <a href="#">
-                                <img src="assets/images/f1.png" alt="f1" />
+                                <img src="/assets/images//f1.png" alt="f1" />
                             </a>
                             </li>
                             <li>
                             <a href="#">
-                                <img src="assets/images/f2.png" alt="f2" />
+                                <img src="/assets/images//f2.png" alt="f2" />
                             </a>
                             </li>
                         </ul>
@@ -195,28 +196,28 @@ const Footer = () => {
                         <ul className="footer_payment text-center text-md-end">
                         <li>
                             <a href="#">
-                            <img src="assets/images/visa.png" alt="visa" />
+                            <img src="/assets/images//visa.png" alt="visa" />
                             </a>
                         </li>
                         <li>
                             <a href="#">
-                            <img src="assets/images/discover.png" alt="discover" />
+                            <img src="/assets/images//discover.png" alt="discover" />
                             </a>
                         </li>
                         <li>
                             <a href="#">
-                            <img src="assets/images/master_card.png" alt="master_card" />
+                            <img src="/assets/images//master_card.png" alt="master_card" />
                             </a>
                         </li>
                         <li>
                             <a href="#">
-                            <img src="assets/images/paypal.png" alt="paypal" />
+                            <img src="/assets/images//paypal.png" alt="paypal" />
                             </a>
                         </li>
                         <li>
                             <a href="#">
                             <img
-                                src="assets/images/amarican_express.png"
+                                src="/assets/images//amarican_express.png"
                                 alt="amarican_express"
                             />
                             </a>

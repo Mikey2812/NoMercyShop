@@ -69,6 +69,9 @@ a:hover {
 	color: #FF324D;
 	text-decoration: none;
 }
+button.comment-reply:hover{
+    color: #FF324D;
+}
 a:focus {
 	outline: none;
 }
@@ -3634,9 +3637,9 @@ h6.blog_title {
 	font-size: 16px;
 }
 .comment_info {
-	padding-bottom: 20px;
+	padding: 20px 0;
 	margin-bottom: 20px;
-	border-bottom: 1px solid #ddd;
+	border-top: 1px solid #ddd;
 }
 .comment_info:last-child {
 	margin-bottom: 0;
@@ -3647,9 +3650,9 @@ h6.blog_title {
 	margin-bottom: 0;
 }
 .children {
-	border-top: 1px solid #ddd;
+	/* border-top: 1px solid #ddd;
 	margin-top: 20px;
-	padding-top: 20px;
+	padding-top: 20px; */
 	margin-left: 60px;
 }
 .comment_content {
@@ -6288,7 +6291,7 @@ footer .widget_recent_post .post_img img {
 	font-size: 14px;
 	padding: 8px 15px;
 	display: inline-block;
-	margin-bottom: 5px;
+	margin: 2.5px;
 	color: #333;
 }
 .tags a:hover {

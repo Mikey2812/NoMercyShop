@@ -6,9 +6,10 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import NotFoundPage from "./pages/NotFoundPage";
 import Register from "./pages/Register";
-import Blog from "./pages/Blog/Blog";
 import Profile from "./pages/Profile/Profile";
 import Contact from "./pages/Contact/Contact";
+import Posts from "./pages/Posts/Posts";
+import Post from "./pages/Posts/Post";
 
 function App() {
     return (
@@ -21,7 +22,8 @@ function App() {
                         <Header/>
                         <Routes>
                             <Route index element={<Home />} />
-                            <Route path="/blogs" element={<Blog />} />
+                            <Route path="/posts" element={<Posts />} />
+                            <Route path="/posts/:id" element={<Post/>} />
                             <Route path="/contact" element={<Contact/>} />
                             <Route path="/profile" element={<Profile/>} />
                             <Route path="/*" element={<NotFoundPage />} />

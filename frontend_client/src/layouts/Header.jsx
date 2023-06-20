@@ -11,7 +11,7 @@ const Header = () => {
                     style={{maxWidth:'60px', padding:'10px'}} 
                     src={ user?.avatar || '/assets/images/avatar_default.jpg' }>
                 </img>
-                <div className="position-absolute dropdown-menu dropdown-menu-right start-auto   end-0"
+                <div className="position-absolute dropdown-menu dropdown-menu-right start-auto end-0"
                     style={{transition: 'all 0.25s ease-in-out', transform: 'scale(0) !important', transformOrigin: 'calc(100% - 30px) 0'}}>
                     <ul className='list-unstyled' style={{maxWidth: "10rem"}}>
                         <li>
@@ -103,7 +103,7 @@ const Header = () => {
                                     </option>
                                     </select>
                                 </div> */}
-                                {user && ( <span>Hi! {user.firstname} {user.lastname}</span> )}
+                                {user && ( <span>Hi there! {user.firstname} {user.lastname}</span> )}
                             </div>
                         </div>
                     </div>
@@ -115,12 +115,12 @@ const Header = () => {
                     <Link className="navbar-brand" to={'/'}>
                         <img
                         className="logo_light"
-                        src="assets/images/logo_light.png"
+                        src="/assets/images/logo_light.png"
                         alt="logo"
                         />
                         <img
                         className="logo_dark"
-                        src="assets/images/logo_dark.png"
+                        src="/assets/images/logo_dark.png"
                         alt="logo"
                         />
                     </Link>
@@ -178,7 +178,7 @@ const Header = () => {
                                     </a>
                                     <a href="#">
                                     <img
-                                        src="assets/images/cart_thamb1.jpg"
+                                        src="/assets/images/cart_thamb1.jpg"
                                         alt="cart_thumb1"
                                     />
                                     Variable product 001
@@ -199,7 +199,7 @@ const Header = () => {
                                     </a>
                                     <a href="#">
                                     <img
-                                        src="assets/images/cart_thamb2.jpg"
+                                        src="/assets/images/cart_thamb2.jpg"
                                         alt="cart_thumb2"
                                     />
                                     Ornare sed consequat
@@ -1014,8 +1014,8 @@ const Header = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to='/blogs' className="nav-link">
-                                        Blog
+                                    <Link to='/posts' className="nav-link">
+                                        Posts
                                     </Link>
                                 </li>
                                 <li>
