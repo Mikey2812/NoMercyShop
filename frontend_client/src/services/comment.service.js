@@ -2,9 +2,10 @@ import axios from "axios";
 import authHeader from "./auth-header";
 
 const API_URL = "http://localhost:8080/api/client/comments";
+const user = JSON.parse(localStorage.getItem('user'));
 
 const getCommentsByPostID = (postId) => {
-    return axios.get(`http://localhost:8080/api/client/posts/${postId}/comments`);
+    return axios.get(`http://localhost:8080/api/client/posts/${postId}/comments${ user ? `?userlogin=${user._id}`: ''}`);
 }
 
 const getCommentByID = (_id) => {

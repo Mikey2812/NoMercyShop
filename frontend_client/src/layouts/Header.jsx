@@ -1,9 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../actions/auth';
+import { toast } from 'react-toastify';
 
 const Header = () => {
     const { isLoggedIn, user } = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate('/login');
+        toast('Logout successful');
+    }
     const profile = () => {
         return (
             <li className="dropdown cart_dropdown">
@@ -20,7 +29,9 @@ const Header = () => {
                             </Link>
                         </li>
                         <li>
-                            <button className="dropdown-item nav-link nav_item" style={{padding:'8px 20px'}}>
+                            <button className="dropdown-item nav-link nav_item" style={{padding:'8px 20px'}} onClick={(()=>
+                                handleLogout()
+                            )}>
                                 Logout
                             </button>
                         </li>

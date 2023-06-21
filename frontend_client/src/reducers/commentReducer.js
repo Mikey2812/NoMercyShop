@@ -5,14 +5,19 @@ import {
     DELETE_COMMENT_SUCCESS,
     IS_REPLY_COMMENT,
     EDIT_COMMENT_SUCCESS,
+    INCREMENT_LIKE_COMMENT,
+    DECREMENT_LIKE_COMMENT,
     
 } from "../actions/types";
     
     const initialState = { isLoading: false, comments: [], numberComments: 0, replyId: '' };
-  
+
     export default function (state = initialState, action) {
         const { type, payload } = action;
         const {comments, numberComments, replyId} = state;
+        const findIndexById = (_id)=>{
+            return comments.findIndex(comment => comment._id === _id);
+        }
         switch (type) {
             case CREATE_DATA_BEGIN:
                 return {
@@ -52,7 +57,7 @@ import {
                 const filteredComments = comments.filter(comment => !comment.path.startsWith(payload.path));
                 return {
                     ...state,
-                    numberComments: numberComments - 1,
+                    numberComments: filteredComments.length,
                     comments: filteredComments,
                 }
             case IS_REPLY_COMMENT:
@@ -61,8 +66,21 @@ import {
                     replyId: payload.replyId,
                 }
             case EDIT_COMMENT_SUCCESS:
-                const commentIndex = comments.findIndex(comment => comment._id === payload._id);
-                comments[commentIndex].content = payload.content;
+                comments[findIndexById(payload._id)].content = payload.content;
+                return {
+                    ...state,
+                }
+            case INCREMENT_LIKE_COMMENT:
+                console.log(findIndexById(payload._id));
+                comments[findIndexById(payload._id)].numberLike += 1;
+                comments[findIndexById(payload._id)].isLiked = true;
+                return {
+                    ...state,
+                }
+            case DECREMENT_LIKE_COMMENT:
+                console.log(findIndexById(payload._id));
+                comments[findIndexById(payload._id)].numberLike -= 1;
+                comments[findIndexById(payload._id)].isLiked = false;
                 return {
                     ...state,
                 }

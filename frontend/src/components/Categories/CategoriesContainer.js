@@ -115,7 +115,7 @@ const CategoriesContainer = () => {
                 <PageBtnContainer/>
             </div>
             {/* /.card */}
-            {/* <WatchModal/> */}
+            <WatchModal/>
             {/* <ActionModal/> */}
             {/* <DeleteModal/> */}
         </div>

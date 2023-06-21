@@ -6,8 +6,11 @@ import {
     DELETE_COMMENT_SUCCESS,
     IS_REPLY_COMMENT,
     EDIT_COMMENT_SUCCESS,
+    INCREMENT_LIKE_COMMENT,
+    DECREMENT_LIKE_COMMENT,
 } from "./types"
 import CommentService from "../services/comment.service"
+import LikeService from "../services/like.service";
 const user = JSON.parse(localStorage.getItem('user'));
 
     export const createComment = (data, type) => async (dispatch) => {
@@ -110,6 +113,36 @@ const user = JSON.parse(localStorage.getItem('user'));
             });
     
         } catch (err) {
+            console.log(err);
+        }
+    }
+    
+    export const incrementLike = (_id) => async (dispatch) => {
+        try {
+            await LikeService.createLike({commentId: _id, type:1});
+            dispatch({
+                type: INCREMENT_LIKE_COMMENT,
+                payload: {
+                    _id: _id,
+                }
+            })
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    export const decrementLike = (_id) => async (dispatch) => {
+        try {
+            await LikeService.deleteLike(_id, 1);
+            dispatch({
+                type: DECREMENT_LIKE_COMMENT,
+                payload: {
+                    _id: _id,
+                }
+            })
+        }
+        catch (err) {
             console.log(err);
         }
     }

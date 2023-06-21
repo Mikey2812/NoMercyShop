@@ -1,27 +1,47 @@
 import React, { useState } from 'react'
 import moment from 'moment';
 import CommentForm from './CommentForm';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteCommentByID, showForm, isReplyComment } from '../../actions/comments';
+import { deleteCommentByID, showForm, isReplyComment, incrementLike, decrementLike } from '../../actions/comments';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { editCommentByID } from '../../actions/comments';
 
-const CommentItem = ({_id, content, userId, type, path, numberLike, updatedAt}) => {
-    const updated_At = moment( updatedAt ).format('MMMM Do YYYY, h:mm:ss a');
+const CommentItem = ({_id, content, userId, type, path, numberLike, updatedAt, isLiked}) => {
+    const navigate = useNavigate();
     const {acceptShowForm} = useSelector(state => state.global);
-    const {user} = useSelector(state=>state.auth);
+    const {user, isLoggedIn } = useSelector(state=>state.auth);
     const [isShowing, setIsShowing] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const dispatch = useDispatch();
     const params = useParams();
     const handleReplyBtn = (()=>{
-        dispatch(isReplyComment(_id));
-        dispatch(showForm());
-        setIsShowing(!isShowing);
+        if(isLoggedIn) {
+            dispatch(isReplyComment(_id));
+            dispatch(showForm());
+            setIsShowing(!isShowing);
+        }
+        else {
+            navigate('/login');
+        }
     });
+    const handleLikeBtn = ((e)=>{
+        if(isLoggedIn) {
+            const element = e.currentTarget;
+            const isActive = element.className.includes("active");
+            if(isActive){
+                dispatch(decrementLike(_id));
+            }
+            else {
+                dispatch(incrementLike(_id));
+            }
+        }
+        else {
+            navigate('/login');
+        }
+    })
     const handleEditBtn = (()=>{
         setIsEdit(!isEdit);
     })
@@ -77,7 +97,9 @@ const CommentItem = ({_id, content, userId, type, path, numberLike, updatedAt}) 
                                 <a href="#">{userId.firstname + ' ' + userId.lastname}</a>
                             </h6>
                             <div className='d-flex'>
-                                <button className='d-flex align-items-center text-dark p-0 border-0 bg-white me-3'>
+                                <button className={`like-btn ${isLiked ? 'active ' : ''}d-flex align-items-center text-dark p-0 border-0 bg-white me-3`} onClick={((e)=>{
+                                    handleLikeBtn(e);
+                                })}>
                                     <i className="ion ion-heart me-1" />
                                     <span className='lh-1' style={{marginTop:'1px'}}>{numberLike}</span>
                                 </button>
@@ -94,7 +116,7 @@ const CommentItem = ({_id, content, userId, type, path, numberLike, updatedAt}) 
                                     Reply
                             </button>
                             {
-                                (userId._id === user._id) &&
+                                ( user && userId._id === user._id) &&
                                 <div className="dropdown cart_dropdown d-flex justify-content-end mt-3">
                                     <i className="ion-ios-more"> <span className='text-dark'> More</span></i>
                                     <div className="position-absolute dropdown-menu dropdown-menu-right end-0"

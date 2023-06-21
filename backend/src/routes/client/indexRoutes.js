@@ -5,6 +5,7 @@ const router = express.Router();
 import { login, register } from '../../controllers/clientController.js';
 import { getAllPosts, getPostByID} from '../../controllers/postController.js';
 import { createComment, deleteComment, deleteCommentByPath, editCommentByID, getCommentByPostID} from '../../controllers/commentController.js'
+import { createLike, deleteLike } from '../../controllers/likeController.js';
 
 router.post('/login', login);
 router.post('/register', register);
@@ -16,5 +17,8 @@ router.get('/posts/:id', getPostByID);
 router.post('/comments', auth, createComment);
 router.patch('/comments/:id', auth, editCommentByID);
 router.delete('/comments/:path', auth, deleteCommentByPath);
+
+router.post('/likes', auth, createLike);
+router.delete('/likes/:locationId', auth, deleteLike);
 
 export default router;

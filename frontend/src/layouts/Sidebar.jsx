@@ -170,31 +170,6 @@ const Sidebar = () => {
                                 </li>
                             </ul>
                         </li>
-                        <li className="nav-item">
-                            <NavLink href="#" className="nav-link" activeclassname="active">
-                                <i className="nav-icon fas fa-chart-pie" />
-                                <p>
-                                    Products
-                                    <i className="right fas fa-angle-left" />
-                                </p>
-                            </NavLink>
-                            <ul className="nav nav-treeview">
-                                <li className="nav-item">
-                                    <NavLink to={'products'} className="nav-link" activeclassname="active" onClick={()=>{tabChange()}}>
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>List Products</p>
-                                    </NavLink>
-                                </li>
-                            </ul>
-                        </li>
-                        <li className="nav-item" onClick={onLogout}>
-                            <button className="nav-link w-100 text-light text-start"> 
-                                <i className="nav-icon fas fa-tachometer-alt" />
-                                <p>
-                                    Logout
-                                </p>
-                            </button>
-                        </li>
                     </ul>
                 </nav>
                 {/* /.sidebar-menu */}

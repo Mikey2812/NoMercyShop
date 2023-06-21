@@ -27,33 +27,23 @@ export const register = (username, email, password) => (dispatch) => {
         );
 };
 
-export const login = (username, password) => (dispatch) => {
-    return AuthService.login(username, password)
-        .then(
-            (data) => {
-                dispatch({
-                    type: LOGIN_SUCCESS,
-                    payload: { user: data },
-                });
-                return Promise.resolve();
-            },
-            // (error) => {
-            //     const message =
-            //     (error.response && error.response.data && error.response.data.message) || error.message ||  error.toString();
-            //     // console.log(message);
-            //     toast.error(message);
-            //     dispatch({
-            //         type: LOGIN_FAIL,
-            //         payload: { message: message},
-            //     });
-            //     return Promise.reject();
-            // }
-    );
+export const login = (username, password) => async (dispatch) => {
+    try {
+        await AuthService.login(username, password);
+        const user = JSON.parse(localStorage.getItem('user'));
+        dispatch({
+            type: LOGIN_SUCCESS,
+            payload: { user: user },
+        });
+
+    } catch (err) {
+        console.log(err);
+    }
 };
 
 export const logout = () => (dispatch) => {
     AuthService.logout();  
     dispatch({
-      type: LOGOUT,
+        type: LOGOUT,
     });
 };

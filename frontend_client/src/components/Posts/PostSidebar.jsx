@@ -2,7 +2,15 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 
 const PostSidebar = () => {
-    // const { values, isLoading , numberValue} = useSelector(state => state.posts);
+    const { values, isLoading , numberValue} = useSelector(state => state.posts);
+    const RecentPostList = () => {
+        const PostItems = []
+        for (let i = 0; i < 3; i++) {
+            const post = values[i];
+            // PostItems.push(<postItems key={post._id} {...post} />);
+        }
+        return PostItems;
+    }
     return (
         <div className="col-lg-3 mt-4 pt-2 mt-lg-0 pt-lg-0">
             <div className="sidebar">
@@ -30,66 +38,67 @@ const PostSidebar = () => {
             <div className="widget">
                 <h5 className="widget_title">Recent Posts</h5>
                 <ul className="widget_recent_post">
-                <li>
-                    <div className="post_footer">
-                    <div className="post_img">
-                        <a href="#">
-                        <img
-                            src="/assets/images/letest_post1.jpg"
-                            alt="letest_post1"
-                        />
-                        </a>
-                    </div>
-                    <div className="post_content">
-                        <h6>
-                        <a href="#">
-                            Lorem ipsum dolor sit amet, consectetur
-                        </a>
-                        </h6>
-                        <p className="small m-0">April 14, 2018</p>
-                    </div>
-                    </div>
-                </li>
-                <li>
-                    <div className="post_footer">
-                    <div className="post_img">
-                        <a href="#">
-                        <img
-                            src="/assets/images/letest_post2.jpg"
-                            alt="letest_post2"
-                        />
-                        </a>
-                    </div>
-                    <div className="post_content">
-                        <h6>
-                        <a href="#">
-                            Lorem ipsum dolor sit amet, consectetur
-                        </a>
-                        </h6>
-                        <p className="small m-0">April 14, 2018</p>
-                    </div>
-                    </div>
-                </li>
-                <li>
-                    <div className="post_footer">
-                    <div className="post_img">
-                        <a href="#">
-                        <img
-                            src="/assets/images/letest_post3.jpg"
-                            alt="letest_post3"
-                        />
-                        </a>
-                    </div>
-                    <div className="post_content">
-                        <h6>
-                        <a href="#">
-                            Lorem ipsum dolor sit amet, consectetur
-                        </a>
-                        </h6>
-                        <p className="small m-0">April 14, 2018</p>
-                    </div>
-                    </div>
-                </li>
+                    {RecentPostList()}
+                    {/* <li>
+                        <div className="post_footer">
+                        <div className="post_img">
+                            <a href="#">
+                            <img
+                                src="/assets/images/letest_post1.jpg"
+                                alt="letest_post1"
+                            />
+                            </a>
+                        </div>
+                        <div className="post_content">
+                            <h6>
+                            <a href="#">
+                                Lorem ipsum dolor sit amet, consectetur
+                            </a>
+                            </h6>
+                            <p className="small m-0">April 14, 2018</p>
+                        </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="post_footer">
+                        <div className="post_img">
+                            <a href="#">
+                            <img
+                                src="/assets/images/letest_post2.jpg"
+                                alt="letest_post2"
+                            />
+                            </a>
+                        </div>
+                        <div className="post_content">
+                            <h6>
+                            <a href="#">
+                                Lorem ipsum dolor sit amet, consectetur
+                            </a>
+                            </h6>
+                            <p className="small m-0">April 14, 2018</p>
+                        </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="post_footer">
+                        <div className="post_img">
+                            <a href="#">
+                            <img
+                                src="/assets/images/letest_post3.jpg"
+                                alt="letest_post3"
+                            />
+                            </a>
+                        </div>
+                        <div className="post_content">
+                            <h6>
+                            <a href="#">
+                                Lorem ipsum dolor sit amet, consectetur
+                            </a>
+                            </h6>
+                            <p className="small m-0">April 14, 2018</p>
+                        </div>
+                        </div>
+                    </li> */}
                 </ul>
             </div>
             <div className="widget">

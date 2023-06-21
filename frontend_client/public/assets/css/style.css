@@ -470,6 +470,12 @@ button:focus:not(:focus-visible) {
 	padding-right: 0 !important;
 	border: 0;
 }
+.like-btn:hover {
+    color: #FF324D !important;
+}
+.like-btn.active {
+    color: #FF324D !important;
+}
 .btn-link {
 	position: relative;
 	z-index: 2;
