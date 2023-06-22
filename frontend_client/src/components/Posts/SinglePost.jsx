@@ -9,7 +9,7 @@ const SinglePost = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getPostByID(params.id));
-    }, [])
+    }, [params.id])
     const { title, description, content } = values;
     return (
         <div className="col-xl-9">

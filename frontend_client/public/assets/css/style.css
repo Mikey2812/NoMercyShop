@@ -6148,6 +6148,15 @@ select option {
 	padding: 0px;
 	z-index: 1;
 }
+
+.pagination .page-item button {
+	height: 40px;
+	width: 40px;
+	text-align: center;
+	padding: 0px;
+	z-index: 1;
+}
+
 .page-link:focus {
 	box-shadow: none;
 }
@@ -6164,9 +6173,17 @@ select option {
 	margin-left: 0px;
 	line-height: 36px;
 }
+.pagination_style1 .page-item button {
+	border: 2px solid #dee2e6;
+	border-radius: 0 !important;
+	color: #687188;
+	margin-left: 0px;
+	line-height: 36px;
+}
 .pagination_style1 .page-item a i {
 	line-height: 36px;
 }
+
 .pagination_style1 .page-item.disabled .page-link,
 .pagination_style3 .page-item.disabled .page-link {
 	color: #c6c6c6;

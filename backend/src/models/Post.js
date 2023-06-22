@@ -21,5 +21,6 @@ mongoose.plugin(slug);
             default: 1,
         },
     },{ timestamps: true });
-
+    // Create a text index on the 'title' field
+    PostSchema.index({ title: 'text' });
 export default mongoose.model('Post', PostSchema);

@@ -25,8 +25,20 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
         const limit = Number(req.query.limit) || 10;
         const skip = (page - 1) * limit;
         // const search = req.query.search || '';
-        const userlogin = req.query.userlogin || ''
-        const values = await Post.find({}).skip(skip).limit(limit).sort({updatedAt: -1}).lean();
+        const userlogin = req.query.userlogin || '';
+        let filter = {}
+        const status = req.query.status;
+        if(status){
+            filter.status = status;
+        }
+        const search = req.query.search;
+        if (search) {
+            filter.title = {
+              $regex: search,
+              $options: 'iu',
+            };
+          }
+        const values = await Post.find(filter).collation({ locale: 'vi', strength: 2 }).sort({ updatedAt: -1 }).skip(skip).limit(limit).lean();
         for (const value of values) {
             if (userlogin !== ''){
                 const liked = await Like.findOne({
@@ -44,6 +56,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
         // const values = await Post.find({name: { $regex: search, $options: 'i' }}).skip(skip).limit(limit);
         const totalValues = await Post.countDocuments({});
         const numOfPages = Math.ceil( totalValues / limit);
+        // const totalValues = values.length;
+        // const numOfPages = Math.ceil( values.length / limit );
         res.status(StatusCodes.OK).json({ values, totalValues, numOfPages});
     };
 

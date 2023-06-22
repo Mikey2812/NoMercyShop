@@ -1,104 +1,88 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import RecentPost from './RecentPost';
+import { getRecentPost } from '../../actions/posts';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
 const PostSidebar = () => {
-    const { values, isLoading , numberValue} = useSelector(state => state.posts);
-    const RecentPostList = () => {
-        const PostItems = []
-        for (let i = 0; i < 3; i++) {
-            const post = values[i];
-            // PostItems.push(<postItems key={post._id} {...post} />);
+    const { recentPosts } = useSelector(state => state.posts);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    useEffect(()=>{
+        dispatch(getRecentPost());
+    },[]);
+    const formik = useFormik({
+        initialValues: {
+            search: '',
+        },
+
+        validationSchema: Yup.object().shape({
+            search: Yup.string()
+        }),
+
+        onSubmit: async values => {
+            if(values !== ''){
+                navigate(`/posts?search=${values.search}`);
+            }
+            else{
+                navigate('/posts');
+            }
         }
-        return PostItems;
-    }
+    });
+
     return (
         <div className="col-lg-3 mt-4 pt-2 mt-lg-0 pt-lg-0">
             <div className="sidebar">
-            <div className="widget">
-                <div className="search_form">
-                <form>
-                    <input
-                    required=""
-                    className="form-control"
-                    placeholder="Search..."
-                    type="text"
-                    />
-                    <button
-                    type="submit"
-                    title="Subscribe"
-                    className="btn icon_search"
-                    name="submit"
-                    value="Submit"
-                    >
-                    <i className="ion-ios-search-strong" />
-                    </button>
-                </form>
+                <div className="widget">
+                    <div className="search_form">
+                    <form onSubmit={formik.handleSubmit}>
+                        <input
+                            type="text"
+                            className="form-control"
+                            name="search"
+                            placeholder="Search values"
+                            value={formik.values.search}
+                            onChange={formik.handleChange}
+                        />
+                        <button
+                            type="submit"
+                            className="btn icon_search"
+                        >
+                                <i className="ion-ios-search-strong" />
+                        </button>
+                    </form>
+                    {   formik.errors.search &&
+                                formik.touched.search &&
+                                (<span className='text-danger'>{formik.errors.search}</span>) }
+                        {/* <form onSubmit={ ()=>{debugger}}>
+                            <input
+                                required=""
+                                className="form-control"
+                                placeholder="Search post"
+                                type="text"
+                                value={search}
+                                onChange={(e) => {setSearch(e.target.value)}}
+                            />
+                            <button
+                                type="submit"
+                                title="Subscribe"
+                                className="btn icon_search"
+                            >
+                                <i className="ion-ios-search-strong" />
+                            </button>
+                        </form> */}
+                    </div>
                 </div>
-            </div>
             <div className="widget">
                 <h5 className="widget_title">Recent Posts</h5>
                 <ul className="widget_recent_post">
-                    {RecentPostList()}
-                    {/* <li>
-                        <div className="post_footer">
-                        <div className="post_img">
-                            <a href="#">
-                            <img
-                                src="/assets/images/letest_post1.jpg"
-                                alt="letest_post1"
-                            />
-                            </a>
-                        </div>
-                        <div className="post_content">
-                            <h6>
-                            <a href="#">
-                                Lorem ipsum dolor sit amet, consectetur
-                            </a>
-                            </h6>
-                            <p className="small m-0">April 14, 2018</p>
-                        </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="post_footer">
-                        <div className="post_img">
-                            <a href="#">
-                            <img
-                                src="/assets/images/letest_post2.jpg"
-                                alt="letest_post2"
-                            />
-                            </a>
-                        </div>
-                        <div className="post_content">
-                            <h6>
-                            <a href="#">
-                                Lorem ipsum dolor sit amet, consectetur
-                            </a>
-                            </h6>
-                            <p className="small m-0">April 14, 2018</p>
-                        </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="post_footer">
-                        <div className="post_img">
-                            <a href="#">
-                            <img
-                                src="/assets/images/letest_post3.jpg"
-                                alt="letest_post3"
-                            />
-                            </a>
-                        </div>
-                        <div className="post_content">
-                            <h6>
-                            <a href="#">
-                                Lorem ipsum dolor sit amet, consectetur
-                            </a>
-                            </h6>
-                            <p className="small m-0">April 14, 2018</p>
-                        </div>
-                        </div>
-                    </li> */}
+                    {
+                        recentPosts.slice(0, 3).map(post => (
+                            <RecentPost key={post._id} {...post} />
+                        ))
+                    }
                 </ul>
             </div>
             <div className="widget">

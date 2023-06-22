@@ -2,13 +2,18 @@ import React, { useEffect } from 'react'
 import { getPosts } from '../../actions/posts';
 import { useSelector, useDispatch } from 'react-redux';
 import PostItem from './PostItem';
+import { useLocation } from 'react-router-dom';
+import Paging from './Paging';
 
 const ListPosts = () => {
-    const { values, isLoading , numberValue} = useSelector(state => state.posts);
+    const { values, isLoading , numberValue, page} = useSelector(state => state.posts);
     const dispatch = useDispatch();
+    const location = useLocation();
     useEffect(() => {
-        dispatch(getPosts());
-    }, [])
+        const searchParams = new URLSearchParams(location.search);
+        const searchQuery = searchParams.get('search');
+        dispatch(getPosts(searchQuery, page));
+    }, [location, page]);
 
     return (
         <div className="col-lg-9">
@@ -21,37 +26,7 @@ const ListPosts = () => {
                     'No more post'
                 }
             </div>
-            <div className="row">
-            <div className="col-12 mt-2 mt-md-4">
-                <ul className="pagination pagination_style1 justify-content-center">
-                <li className="page-item disabled">
-                    <a className="page-link" href="#" tabIndex={-1}>
-                    <i className="linearicons-arrow-left" />
-                    </a>
-                </li>
-                <li className="page-item active">
-                    <a className="page-link" href="#">
-                    1
-                    </a>
-                </li>
-                <li className="page-item">
-                    <a className="page-link" href="#">
-                    2
-                    </a>
-                </li>
-                <li className="page-item">
-                    <a className="page-link" href="#">
-                    3
-                    </a>
-                </li>
-                <li className="page-item">
-                    <a className="page-link" href="#">
-                    <i className="linearicons-arrow-right" />
-                    </a>
-                </li>
-                </ul>
-            </div>
-            </div>
+            <Paging/>
         </div>
     )
 }

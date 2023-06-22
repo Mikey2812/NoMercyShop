@@ -1,18 +1,20 @@
 import {
-    GET_DATAS_BEGIN, GET_DATAS_SUCCESS, GET_DATAS_ERROR, INCREMENT_LIKE_POST, DECREMENT_LIKE_POST
+    GET_DATAS_BEGIN, GET_DATAS_SUCCESS, GET_DATAS_ERROR, INCREMENT_LIKE_POST, DECREMENT_LIKE_POST, GET_RECENT_POST, CHANGEPAGE
 } from "./types"
 
 import PostService from "../services/post.service";
 import LikeService from "../services/like.service";
 
-    export const getPosts = () => async (dispatch) => {
+    export const getPosts = (filter, page) => async (dispatch) => {
         try {
-            const res = await PostService.getPosts();
+            const res = await PostService.getPosts(filter, page);
 
             dispatch({
                 type: GET_DATAS_SUCCESS,
                 payload: { 
-                    values: res.data.values
+                    values: res.data.values,
+                    numOfPages: res.data.numOfPages,
+                    totalValues: res.data.totalValues,
                 },
             });
     
@@ -26,6 +28,21 @@ import LikeService from "../services/like.service";
             const res = await PostService.getPostByID(_id);
             dispatch({
                 type: GET_DATAS_SUCCESS,
+                payload: { 
+                    values: res.data.values
+                },
+            });
+    
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    export const getRecentPost = () => async (dispatch) => {
+        try {
+            const res = await PostService.getRecentPost();
+            dispatch({
+                type: GET_RECENT_POST,
                 payload: { 
                     values: res.data.values
                 },
@@ -60,6 +77,15 @@ import LikeService from "../services/like.service";
                     _id: _id,
                 }
             })
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    export const changePage = (newPage) => async (dispatch) => {
+        try {
+            dispatch({ type: CHANGEPAGE, payload: { newPage: newPage } });
         }
         catch (err) {
             console.log(err);

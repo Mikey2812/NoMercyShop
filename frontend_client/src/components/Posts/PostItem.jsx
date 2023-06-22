@@ -62,9 +62,11 @@ const PostItem = ({_id, title, description, view, number_comment, number_like, a
                             </span>
                         </li>
                         <li>
-                            <button className={`like-btn ${ isLiked === true ? 'active ' : ''} d-flex align-items-center text-dark p-0 border-0 bg-white`} onClick={((e)=>{
-                                    handleLikeBtn(e);
-                                })}>
+                            <button className={`like-btn ${ isLiked === true ? 'active ' : ''} d-flex align-items-center text-dark p-0 border-0 bg-white`} 
+                                    style={{minHeight:'24px'}}
+                                    onClick={((e)=>{
+                                        handleLikeBtn(e);
+                                    })}>
                                     <i className="ion ion-heart me-1" />
                                     <span className='lh-1' style={{marginTop:'1px'}}>{number_like}</span>
                             </button>

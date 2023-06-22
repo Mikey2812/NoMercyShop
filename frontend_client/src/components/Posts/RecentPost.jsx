@@ -1,25 +1,30 @@
-import React from 'react'
+import React from 'react';
+import moment from 'moment';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-const RecentPost = () => {
+const RecentPost = ({_id, avatar, title, updatedAt}) => {
+    const {imgUrl} = useSelector(state=>state.global)
     return (
         <div>   
-            <li>
+            <li className='my-1'>
                 <div className="post_footer">
                     <div className="post_img">
-                        <a href="#">
+                        <Link to={`/posts/${_id}`}>
                             <img
-                                src="/assets/images/letest_post1.jpg"
+                                src={`${imgUrl}posts/${avatar}`}
+                                style={{height:'80px'}}
                                 alt="letest_post1"
                             />
-                            </a>
+                            </Link>
                     </div>
                     <div className="post_content">
                         <h6>
-                        <a href="#">
-                            Lorem ipsum dolor sit amet, consectetur
-                        </a>
+                        <Link to={`/posts/${_id}`}>
+                            {title}
+                        </Link>
                         </h6>
-                        <p className="small m-0">April 14, 2018</p>
+                        <p className="small m-0">{moment(updatedAt).format('MMMM DD, YYYY')}</p>
                     </div>
                 </div>
             </li>

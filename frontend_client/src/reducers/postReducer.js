@@ -1,8 +1,8 @@
 import {
-    GET_DATAS_BEGIN, GET_DATAS_SUCCESS, GET_DATAS_ERROR, INCREMENT_LIKE_POST, DECREMENT_LIKE_POST
+    GET_DATAS_BEGIN, GET_DATAS_SUCCESS, GET_DATAS_ERROR, INCREMENT_LIKE_POST, DECREMENT_LIKE_POST, GET_RECENT_POST, CHANGEPAGE
 } from "../actions/types";
     
-    const initialState = { isLoading: false, values: [] };
+    const initialState = { isLoading: false, values: [], recentPosts:[], page: 1 };
   
     export default function (state = initialState, action) {
         const { type, payload } = action;
@@ -23,6 +23,8 @@ import {
                     isLoading: false,
                     values: payload.values,
                     numberValue: payload.values.length,
+                    numOfPages: payload.numOfPages,
+                    totalValues: payload.totalValues,
                 };
 
             case GET_DATAS_ERROR:
@@ -42,6 +44,16 @@ import {
                 values[findIndexById(payload._id)].isLiked = false;
                 return {
                     ...state,
+                }
+            case GET_RECENT_POST:
+                return {
+                    ...state,
+                    recentPosts: payload.values,
+                }
+            case CHANGEPAGE:
+                return {
+                    ...state,
+                    page: payload.newPage,
                 }
             default:
                 return state;

@@ -11,12 +11,12 @@ import store from './store';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-    <React.StrictMode>
+    // <React.StrictMode>
         <Provider store={store}>
             <App />
+            <ToastContainer />
         </Provider>    
-        <ToastContainer />
-    </React.StrictMode>
+    // {/* </React.StrictMode> */}
 );
 
 reportWebVitals();
