@@ -11,9 +11,9 @@ import bodyParser from 'body-parser';
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
-
 app.use(cors());
 app.use(express.static('public'));
+
 //fileUpload
 import fileUpload from 'express-fileupload';
 
@@ -37,13 +37,13 @@ const port = process.env.PORT || 5000;
 
 const start = async () => {
     try {
-      await connectDB(process.env.MONGO_URL);
-      app.listen(port, () => {
-        console.log(`Server is listening on port ${port}...`);
-      });
+        await connectDB(process.env.MONGO_URL);
+        app.listen(port, () => {
+            console.log(`Server is listening on port ${port}...`);
+        });
     } catch (error) {
-      console.log(error);
+        console.log(error);
     }
-  };
+};
   
-  start();
+start();

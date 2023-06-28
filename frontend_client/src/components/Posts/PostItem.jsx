@@ -1,26 +1,19 @@
 import React from 'react'
-import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { decrementLike, incrementLike } from '../../actions/posts';
-
+import { decrementLike, incrementLike } from '../../redux/actions/posts';
+import { formatToMonthDayYear } from '../../utils/FormatDate';
 
 const PostItem = ({_id, title, description, view, number_comment, number_like, avatar, updatedAt, isLiked}) => {
-    const formattedDate = moment(updatedAt).format("MMMM D, YYYY");
-    const {imgUrl} = useSelector(state => state.global);
     const {isLoggedIn} = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleLikeBtn = ((e)=>{
         if (isLoggedIn) {
-            const element = e.currentTarget;
-            const isActive = element.className.includes("active");
-            if(isActive){
-                // element.classList.remove("active");
+            if(isLiked){
                 dispatch(decrementLike(_id));
             }
             else {
-                // element.classList.add("active");
                 dispatch(incrementLike(_id));
             }
         }
@@ -33,8 +26,7 @@ const PostItem = ({_id, title, description, view, number_comment, number_like, a
             <div className="blog_post blog_style2 box_shadow1">
                 <div className="blog_img">
                     <Link to={`/posts/${_id}`}>
-                        <img style={{maxWidth:'825px', maxHeight:'550px'}} 
-                             src={`${imgUrl}/posts/${avatar}`} alt={`img_${avatar}`} />
+                        <img className='post-avatar' src={`${process.env.REACT_APP_IMG_URL}/posts/${avatar}`} alt={`img_${avatar}`} />
                     </Link>
                 </div>
                 <div className="blog_content bg-white">
@@ -47,35 +39,28 @@ const PostItem = ({_id, title, description, view, number_comment, number_like, a
                     <ul className="list_none blog_meta align-middle">
                         <li>
                             <span className='text-dark'>
-                                <i className="ti-calendar" 
-                                    style={{ color: '#FF324D', marginRight: '5px' }}
-                                /> 
-                                {formattedDate}
+                                <i className="ti-calendar text_default me-1" /> 
+                                {formatToMonthDayYear(updatedAt)}
                             </span>
                         </li>
                         <li>
                             <span className='text-dark'>
-                                <i className="ti-eye"
-                                    style={{ color: '#FF324D', marginRight: '5px' }}
-                                /> 
+                                <i className="ti-eye text_default me-1" /> 
                                 {view}
                             </span>
                         </li>
                         <li>
-                            <button className={`like-btn ${ isLiked === true ? 'active ' : ''} d-flex align-items-center text-dark p-0 border-0 bg-white`} 
-                                    style={{minHeight:'24px'}}
+                            <button className={`like-btn ${ isLiked === true ? 'active ' : ''} d-flex align-items-center text-dark p-0 mt-1 border-0 bg-white`} 
                                     onClick={((e)=>{
                                         handleLikeBtn(e);
                                     })}>
                                     <i className="ion ion-heart me-1" />
-                                    <span className='lh-1' style={{marginTop:'1px'}}>{number_like}</span>
+                                    <span className='lh-1'>{number_like}</span>
                             </button>
                         </li>
                         <li>
-                            <span className='text-dark'>
-                                <i className="ti-comments"
-                                    style={{ color: '#FF324D', marginRight: '5px' }}
-                                /> 
+                            <span className='text-dark d-flex align-items-center'>
+                                <i className="ti-comments text_default me-1" /> 
                                 {number_comment}
                             </span>
                         </li>

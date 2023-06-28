@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
-import moment from 'moment';
 import CommentForm from './CommentForm';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteCommentByID, showForm, isReplyComment, incrementLike, decrementLike } from '../../actions/comments';
+import { editCommentByID ,deleteCommentByID, showForm, isReplyComment, incrementLike, decrementLike } from '../../redux/actions/comments';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { editCommentByID } from '../../actions/comments';
+import { timeAgo } from '../../utils/FormatDate';
 
 const CommentItem = ({_id, content, userId, type, path, numberLike, updatedAt, isLiked}) => {
     const navigate = useNavigate();
@@ -29,9 +28,7 @@ const CommentItem = ({_id, content, userId, type, path, numberLike, updatedAt, i
     });
     const handleLikeBtn = ((e)=>{
         if(isLoggedIn) {
-            const element = e.currentTarget;
-            const isActive = element.className.includes("active");
-            if(isActive){
+            if(isLiked){
                 dispatch(decrementLike(_id));
             }
             else {
@@ -88,7 +85,7 @@ const CommentItem = ({_id, content, userId, type, path, numberLike, updatedAt, i
         <li className={`comment_info ${type === 1 ? 'children': ''}`}>
             <div className="d-flex">
                 <div className="comment_user">
-                    <img className='rounded-circle' src={userId.avatar || '/assets/images/avatar_default.jpg'} alt="avatar" />
+                    <img className='comment_avatar rounded-circle' src={userId.avatar || '/assets/images/avatar_default.jpg'} alt="avatar" />
                 </div>
                 <div className="comment_content w-100">
                     <div className="d-flex">
@@ -101,10 +98,10 @@ const CommentItem = ({_id, content, userId, type, path, numberLike, updatedAt, i
                                     handleLikeBtn(e);
                                 })}>
                                     <i className="ion ion-heart me-1" />
-                                    <span className='lh-1' style={{marginTop:'1px'}}>{numberLike}</span>
+                                    <span className='lh-1'>{numberLike}</span>
                                 </button>
-                                <div className="comment-time m-0 d-flex align-items-center" style={{textTransform:'unset'}}>
-                                    {`${moment(updatedAt).fromNow(true)} ago`}
+                                <div className="comment-time m-0 d-flex align-items-center">
+                                    {`${timeAgo(updatedAt)} ago`}
                                 </div>
                             </div>               
                         </div>
@@ -119,13 +116,8 @@ const CommentItem = ({_id, content, userId, type, path, numberLike, updatedAt, i
                                 ( user && userId._id === user._id) &&
                                 <div className="dropdown cart_dropdown d-flex justify-content-end mt-3">
                                     <i className="ion-ios-more"> <span className='text-dark'> More</span></i>
-                                    <div className="position-absolute dropdown-menu dropdown-menu-right end-0"
-                                        style={{
-                                            transition: 'all 0.25s ease-in-out', 
-                                            transform: 'scale(0) !important', transformOrigin: 'calc(100% - 30px) 0',
-                                            left:'unset',    
-                                        }}>
-                                        <ul className='list-unstyled d-flex justify-content-evenly' style={{minWidth: "12rem"}}>
+                                    <div className="position-absolute dropdown-menu dropdown-menu-right end-0" style={{left:'unset'}}>
+                                        <ul className='comment-action list-unstyled d-flex justify-content-evenly'>
                                             <li>
                                                 <button className='btn btn-outline-warning p-2 m-1' onClick={(()=>{
                                                     handleEditBtn();
@@ -150,7 +142,7 @@ const CommentItem = ({_id, content, userId, type, path, numberLike, updatedAt, i
                     {
                         !isEdit ? 
                         (
-                            <p className='text-dark' style={{padding:'1px'}}>
+                            <p className='text-dark'>
                                 {content}
                             </p>
                         ) :

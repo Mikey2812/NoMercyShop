@@ -1,10 +1,8 @@
 import React from 'react';
-import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { formatToMonthDayYear } from '../../utils/FormatDate';
 
 const RecentPost = ({_id, avatar, title, updatedAt}) => {
-    const {imgUrl} = useSelector(state=>state.global)
     return (
         <div>   
             <li className='my-1'>
@@ -12,9 +10,9 @@ const RecentPost = ({_id, avatar, title, updatedAt}) => {
                     <div className="post_img">
                         <Link to={`/posts/${_id}`}>
                             <img
-                                src={`${imgUrl}posts/${avatar}`}
-                                style={{height:'80px'}}
-                                alt="letest_post1"
+                                className='post-recent-img'
+                                src={`${process.env.REACT_APP_IMG_URL}posts/${avatar}`}
+                                alt={`letest_post${_id}`}
                             />
                             </Link>
                     </div>
@@ -24,7 +22,7 @@ const RecentPost = ({_id, avatar, title, updatedAt}) => {
                             {title}
                         </Link>
                         </h6>
-                        <p className="small m-0">{moment(updatedAt).format('MMMM DD, YYYY')}</p>
+                        <p className="small m-0">{formatToMonthDayYear(updatedAt)}</p>
                     </div>
                 </div>
             </li>

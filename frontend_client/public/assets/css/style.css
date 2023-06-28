@@ -1076,6 +1076,13 @@ button:focus:not(:focus-visible) {
 .header_wrap {
 	transition: all 0.5s ease 0s;
 }
+.profile-item:hover {
+    transform: translateX(10px);
+    transition: all 0.5s ease 0s;
+}
+.avatar-header {
+    max-width: 4rem;
+}
 .header_wrap:not([class*="bg_"]):not([class*="bg-"]) {
 	background-color: #fff;
 }
@@ -1561,7 +1568,7 @@ button:focus:not(:focus-visible) {
 	color: #333 !important;
 }
 .cart_list img {
-	border: 1px solid #ddd
+	border: 1px solid #ddd;
 	background-color: #ffffff;
 	float: left;
 	margin-right: 10px;
@@ -3410,6 +3417,13 @@ input.text {
 .blog_content {
 	padding-top: 15px;
 }
+.post-recent-img {
+    height: 80px;
+}
+.post-avatar {
+    max-width: 825px;
+    max-height: 550px;
+}
 .blog_post .blog_img a {
 	display: block;
 	overflow: hidden;
@@ -3668,7 +3682,6 @@ h6.blog_title {
 	font-size: 14px;
 	line-height: normal;
 	margin-bottom: 8px;
-	text-transform: uppercase;
 	font-style: italic;
 }
 .comment-reply i {
@@ -4305,7 +4318,7 @@ footer .widget_title {
 	top: 0;
 	bottom: 0;
 	background-color: #FF324D;
-	z-index: ;
+	/* z-index: ; */
 	transition: all 0.5s ease-in-out;
 	-moz-transform: scale(0);
 	-webkit-transform: scale(0);
@@ -5771,10 +5784,16 @@ footer .widget_title {
 .comment_list {
 	margin-bottom: 20px;
 }
+.comment-action {
+    min-width: 12rem;
+}
 .comments li {
 	margin-bottom: 20px;
 	border-bottom: 1px solid #ddd;
 	padding-bottom: 20px;
+}
+.comment_avatar {
+    max-width: 5rem;
 }
 .comment_img {
 	float: left;

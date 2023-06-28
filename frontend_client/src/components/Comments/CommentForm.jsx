@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { createComment, blockForm } from '../../actions/comments';
+import { createComment, blockForm } from '../../redux/actions/comments';
 import { useNavigate } from 'react-router-dom';
 
 const CommentForm = ({post_Id, type, path}) => {
@@ -46,8 +46,7 @@ const CommentForm = ({post_Id, type, path}) => {
             <div className="row">
                 <div className="user_info col-md-2 mb-3">
                     <div className='user_avatar d-flex justify-content-center'>
-                        <img className='rounded-circle' 
-                            style={{maxWidth:'6rem', padding:'10px'}} 
+                        <img className='comment_avatar rounded-circle'
                             src={ user?.avatar || '/assets/images/avatar_default.jpg' }>
                         </img>
                     </div>

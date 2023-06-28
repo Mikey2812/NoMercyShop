@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PageBtnContainer from '../Paging/PageBtnContainer';
-import { useAppContext } from '../../contexts/appContext';
+import { useAppContext } from '../../contexts/contexts/appContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import Product from './Product';

@@ -1,59 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { useAppContext } from '../../contexts/appContext';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import Validator from '../../utils/validator';
+import { useFormik } from 'formik';
+import * as Yup from "yup";
+import { PostsContext } from '../../contexts/contexts/postsContext';
 
-const initialState = {
-    title: '',
-    description: '',
-    content: '',
-    avatar: '',
-};
-const AddPost = () => {    
-    const [values, setValues] = useState(initialState);
-    const [avatar, setAvatar] = useState();
-    const [errors, setErrors] = useState({});
+const AddPost = () => { 
+    const {isLoading, createPost} = useContext(PostsContext); 
+    const formik = useFormik({
+        initialValues: {
+            title: '',
+            description: '',
+            content: '',
+            avatar: null,
+            avatarPreview: '',
+        },
+        validationSchema: Yup.object({
+            title: Yup.string()
+                .required("Title is required!"),
+            description: Yup.string()
+                .required("Description is required!"),    
+            content: Yup.string()
+                .required("Content is required!"),
+            avatar: Yup.mixed().required('Avatar is required!'), 
+        }),
+        onSubmit: async values => {
+            const formData = new FormData();
+            formData.append('title', values.title);     
+            formData.append('description', values.description);     
+            formData.append('content', values.content);     
+            formData.append('avatar', values.avatar);
+            await createPost(formData);
+        }
+    });  
     const navigate = useNavigate();
-
-    const { isLoading, isError, isEdit, message, createData } = useAppContext();
-    const handleInput = (e) => {
-        setValues({ ...values, [e.target.name]: e.target.value });
-        console.log(values);
-    };
-    const handlePreviewAvatar = (e) => {
-        const file = e.target.files[0];
-        file.preview = URL.createObjectURL(file);
-        setAvatar(file);
-        setValues({ ...values, avatar: file });
-    }
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append('title', values.title);     
-        formData.append('description', values.description);     
-        formData.append('content', values.content);     
-        formData.append('avatar', values.avatar);
-        createData('posts', formData)
-        .then(() => {
-            console.log(isError);
-            if (isError) {
-                toast.error(message);
-            } else {
-                toast.success('Add new post Success!');
-                navigate('/posts');
-            }
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-    };
-
+    
     return (
         <div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={formik.handleSubmit}>
                 <div className="card-body">
                     <div className="form-group">
                         <label htmlFor="exampleInputEmail1">Title</label>
@@ -62,9 +47,12 @@ const AddPost = () => {
                             className="form-control"
                             placeholder="Enter title"
                             name='title'
-                            onChange={handleInput}
-                            value={values.title}
+                            value={formik.values.title}
+                            onChange={formik.handleChange}
                         />
+                        {formik.errors.title && formik.touched.title && (
+                                        <p className='text-danger'>{formik.errors.title}</p>
+                                )}
                     </div>
                     <div className="form-group">
                         <label htmlFor="exampleInputPassword1">Description</label>
@@ -73,37 +61,56 @@ const AddPost = () => {
                             rows="3" 
                             placeholder="Enter ..."
                             name="description"
-                            onChange={handleInput}>
+                            value={formik.values.description}
+                            onChange={formik.handleChange}
+                        >
                         </textarea>
+                        {formik.errors.description && formik.touched.description && (
+                                        <p className='text-danger'>{formik.errors.description}</p>
+                                )}
                     </div>
                     <div className="form-group">
                         <label htmlFor="exampleInputPassword1">Content</label>
                         <CKEditor
                             editor={ ClassicEditor }
-                            data={ values.content}
-                            onChange={ ( event, editor ) => {
+                            data={ formik.values.content}
+                            onChange={(event, editor) => {
                                 const data = editor.getData();
-                                setValues({ ...values, content: data });
-                            } }
+                                formik.setFieldValue('content', data);
+                            }}
                         />
+                        {formik.errors.content && formik.touched.content && (
+                                        <p className='text-danger'>{formik.errors.content}</p>
+                                )}
                     </div>
                     <div className="form-group">
                         <label htmlFor="exampleInputFile">Avatar</label>
                         <input 
                             className="form-control" 
-                            type="file" 
                             id="formFileMultiple" 
-                            // multiple
-                            onChange={handlePreviewAvatar}/>
+                            type="file"
+                            name="avatar"
+                            onChange={(event) => {
+                                formik.setFieldValue('avatar', event.currentTarget.files[0]);
+                                formik.setFieldValue('avatarPreview', URL.createObjectURL(event.currentTarget.files[0]));
+                            }}
+                        />
+                        {formik.errors.avatar && formik.touched.avatar && (
+                            <p className='text-danger'>{formik.errors.avatar}</p>
+                        )}
                     </div>
                     <div className='d-flex justify-content-center'>
-                        {avatar &&  <img src={avatar.preview} className='mw-100'/> }
+                        {formik.values.avatarPreview && (
+                            <img src={formik.values.avatarPreview} alt="Avatar Preview" 
+                                style={{ maxWidth: '300px' }} 
+                            />
+                        )}
                     </div>
                 </div>
                 {/* /.card-body */}
                 <div className="card-footer">
                     <button type="submit" className="btn btn-primary" disabled={isLoading}>
-                        {isEdit ? 'Edit Post' : 'Add New Post'}
+                        Add New Post
                     </button>
                     <button type='button' className='btn btn-secondary ms-3' onClick={() => {navigate('/posts')}}>Go back</button>
                 </div>

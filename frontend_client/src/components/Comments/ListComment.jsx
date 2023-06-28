@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCommentsByPostID } from '../../actions/comments';
+import { getCommentsByPostID } from '../../redux/actions/comments';
 import CommentItem from './CommentItem';
 const ListComment = ({post_Id}) => {
     const {comments, numberComments} = useSelector(state => state.comments);

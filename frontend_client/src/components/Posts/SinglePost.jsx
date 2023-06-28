@@ -1,15 +1,37 @@
-import React, { useEffect } from 'react';
-import { getPostByID } from '../../actions/posts';
+import React, { useEffect, useRef } from 'react';
+import { getPostByID } from '../../redux/actions/posts';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import CommentArea from '../Comments/CommentArea';
 const SinglePost = () => {
     const params = useParams();
     const { values, isLoading } = useSelector(state => state.posts);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch();  
+    const elementRef = useRef(null);
+
+    useEffect(() => {
+      const handleScroll = () => {
+        const element = elementRef.current;
+        if (element) {
+          const { top, height } = element.getBoundingClientRect();
+          const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+          if (top + height <= windowHeight) {
+                console.log('do some thing');
+          }
+        }
+      };
+      window.addEventListener('scroll', handleScroll);
+
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }, []);
     useEffect(() => {
         dispatch(getPostByID(params.id));
-    }, [params.id])
+    }, [params.id]);
+    useEffect(() => {
+
+     }, []);
     const { title, description, content } = values;
     return (
         <div className="col-xl-9">
@@ -22,7 +44,7 @@ const SinglePost = () => {
                 </p>
                 <div className="blog_content">
                     <div dangerouslySetInnerHTML={{ __html: content }}></div>
-                    <div className="blog_post_footer">
+                    <div ref={elementRef} className="blog_post_footer">
                             <div className="row justify-content-between align-items-center">
                                 <div className="col-md-8 mb-3 mb-md-0">
                                 <div className="tags">

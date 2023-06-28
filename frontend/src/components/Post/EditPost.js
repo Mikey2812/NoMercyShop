@@ -1,56 +1,63 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { useAppContext } from '../../contexts/appContext';
 import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { PostsContext } from '../../contexts/contexts/postsContext';
+import { useFormik } from 'formik';
+import * as Yup from "yup";
 
 const EditPost = () => {    
     const params = useParams();
     const navigate = useNavigate();
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [content, setContent] = useState('');
-    const [avatar, setAvatar] = useState();
+    const { getPostByID, post, isLoading, editPost } = useContext(PostsContext);
 
-    const { isLoading, getDataByID, recordSelected, srcImg, editData, message } = useAppContext();
-    useEffect(() => {
-        getDataByID(params.id,'posts');
-    }, []);
-    useEffect(() => {
-        if (recordSelected){
-            setTitle(recordSelected.title);
-            setDescription(recordSelected.description);
-            setContent(recordSelected.content);
+    const formik = useFormik({
+        initialValues: {
+            title: '',
+            description: '',
+            content: '',
+            avatar: null,
+            avatarPreview: '',
+        },
+        validationSchema: Yup.object({
+            title: Yup.string()
+                .required("Title is required!"),
+            description: Yup.string()
+                .required("Description is required!"),    
+            content: Yup.string()
+                .required("Content is required!"),
+            // avatar: Yup.mixed().required('Avatar is required!'), 
+        }),
+        onSubmit: async values => {
+            const formData = new FormData();
+            formData.append('title', values.title);     
+            formData.append('description', values.description);     
+            formData.append('content', values.content);     
+            if(values.avatar) {
+                formData.append('avatar', values.avatar);
+            }
+            editPost(params.id, formData);
         }
-    }, [recordSelected]);
-    const handlePreviewAvatar = (e) => {
-        const file = e.target.files[0];
-        file.preview = URL.createObjectURL(file);
-        setAvatar(file);
-    }
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append('title', title);     
-        formData.append('description', description);     
-        formData.append('content', content);  
-        if(avatar) {
-            formData.append('avatar', avatar);
-        }
-        editData(params.id, 'posts', formData)
-        .then(() => {
-            toast.success('Edit post Success!');
-            navigate('/posts');
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-    };
+    }); 
 
+    useEffect(()=>{
+        getPostByID(params.id);
+    },[]);
+
+    useEffect(()=>{
+        if(post) {
+            formik.setValues({
+                title: post.title,
+                description: post.description,
+                content: post.content,
+                avatar: null,
+                avatarPreview: '',
+            });
+        }
+    },[post]);
     return (
-        recordSelected &&
-        <form onSubmit={handleSubmit}>
+        !isLoading &&
+        <form onSubmit={formik.handleSubmit}>
             <div className="card-body">
                 <div className="form-group">
                     <label htmlFor="exampleInputEmail1">Title</label>
@@ -59,9 +66,12 @@ const EditPost = () => {
                         className="form-control"
                         placeholder="Enter title"
                         name='title'
-                        value={title}
-                        onChange={(e)=>{setTitle(e.target.value)}}
+                        value={formik.values.title}
+                        onChange={formik.handleChange}
                     />
+                    {formik.errors.title && formik.touched.content && (
+                                    <p className='text-danger'>{formik.errors.content}</p>
+                    )}
                 </div>
                 <div className="form-group">
                     <label htmlFor="exampleInputPassword1">Description</label>
@@ -70,38 +80,64 @@ const EditPost = () => {
                         rows="3" 
                         placeholder="Enter ..."
                         name="description"
-                        value={description}
-                        onChange={(e)=>{setDescription(e.target.value)}}
+                        value={formik.values.description}
+                        onChange={formik.handleChange}
                     >
                     </textarea>
+                    {formik.errors.description && formik.touched.description && (
+                                    <p className='text-danger'>{formik.errors.description}</p>
+                    )}
                 </div>
                 <div className="form-group">
                     <label htmlFor="exampleInputPassword1">Content</label>
                     <CKEditor
                         editor = { ClassicEditor }
-                        data = { content}
-                        onChange = {(event, editor) => {
-                            const data = editor.getData();
-                            setContent(data);
-                        }}
-                        // onBlur = {(event, editor) => {
-                        //     const data = editor.getData();
-                        //     setContent(data);
-                        // }}
+                        data={ formik.values.content}
+                            onChange={(event, editor) => {
+                                const data = editor.getData();
+                                formik.setFieldValue('content', data);
+                            }}
                     />
+                    {formik.errors.content && formik.touched.content && (
+                                    <p className='text-danger'>{formik.errors.content}</p>
+                    )}
                 </div>
                 <div className="form-group">
                     <label htmlFor="exampleInputFile">Avatar</label>
                     <input 
                         className="form-control" 
-                        type="file" 
                         id="formFileMultiple" 
-                        // value={values.avatar}
-                        onChange={handlePreviewAvatar}/>
+                        type="file"
+                        name="avatar"
+                        onChange={(event) => {
+                            formik.setFieldValue('avatar', event.currentTarget.files[0]);
+                            formik.setFieldValue('avatarPreview', URL.createObjectURL(event.currentTarget.files[0]));
+                        }}
+                    />
+                    {formik.errors.avatar && formik.touched.avatar && (
+                        <p className='text-danger'>{formik.errors.avatar}</p>
+                    )}
                 </div>
-                <div className='d-flex justify-content-center'>
-                    <img src={`${srcImg}/posts/${recordSelected.avatar}`} className='mw-100'/>
-                </div>
+                {formik.values.avatarPreview && (
+                    <div>
+                            <h6 className='font-weight-bold'>New Image</h6>
+                        <div className='d-flex justify-content-center'>
+                            <img src={formik.values.avatarPreview} alt="Avatar Preview" 
+                                style={{ maxWidth: '300px' }} 
+                                />
+                        </div>
+                    </div>
+                )}
+                {post &&
+                    <div>
+                        <h6 className='font-weight-bold'>Old Image</h6>
+                        <div className='d-flex justify-content-center'>
+                            <img src={`${process.env.REACT_APP_IMG_URL}/posts/${post.avatar}`} alt="Avatar Preview" 
+                                style={{ maxWidth: '300px' }} 
+                            />
+                        </div>
+                    </div>
+                }
             </div>
             {/* /.card-body */}
             <div className="card-footer">

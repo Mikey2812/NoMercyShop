@@ -41,27 +41,19 @@ import { StatusCodes } from 'http-status-codes';
 
         const user = await User.findOne({ email }).select('+password');
         if (!user) {
-            res.status(StatusCodes.UNAUTHORIZED).json({message: 'Email wrong'});
+            res.status(StatusCodes.UNAUTHORIZED).json({message: 'Email not found'});
         }
 
         const isPasswordCorrect = await user.comparePassword(password);
         if (!isPasswordCorrect) {
-            res.status(StatusCodes.UNAUTHORIZED).json({message: 'Password wrong'});
+            res.status(StatusCodes.UNAUTHORIZED).json({message: 'Password incorrect'});
         }
 
         const token = user.createJWT();
         user.password = undefined;
 
-        res.status(StatusCodes.OK).json({ user, token, location: user.location });
+        res.status(StatusCodes.OK).json({ user, token, message: 'Login successful' });
         
-    };
-
-    const logout = async (req, res) => {
-    //     res.cookie('token', 'logout', {
-    //         httpOnly: true,
-    //         expires: new Date(Date.now() + 1000),
-    //     });
-    //     res.status(StatusCodes.OK).json({ msg: 'Admin logged out!' });
     };
 
     const register = async (req, res) => {
@@ -76,7 +68,7 @@ import { StatusCodes } from 'http-status-codes';
         const user = await User.create({ firstname, lastname, email, password, phone });
         const token = user.createJWT();
         user.password = undefined;
-        res.status(StatusCodes.OK).json({ user, token});
+        res.status(StatusCodes.OK).json({ user, token, message: 'Register successful'});
     }
 
-export { login, logout, register };
+export { login, register };

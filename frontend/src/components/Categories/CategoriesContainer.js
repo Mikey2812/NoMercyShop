@@ -5,7 +5,7 @@ import WatchModal from './WatchModal';
 import ActionModal from './ActionModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
-import { useAppContext } from '../../contexts/appContext';
+import { useAppContext } from '../../contexts/contexts/appContext';
 import DeleteModal from './DeleteModal';
 const CategoriesContainer = () => {
 

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import RecentPost from './RecentPost';
-import { getRecentPost } from '../../actions/posts';
+import { getRecentPost, changePage } from '../../redux/actions/posts';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
+import PostTags from './PostTags';
 
 const PostSidebar = () => {
     const { recentPosts } = useSelector(state => state.posts);
@@ -24,6 +25,7 @@ const PostSidebar = () => {
 
         onSubmit: async values => {
             if(values !== ''){
+                dispatch(changePage(1));
                 navigate(`/posts?search=${values.search}`);
             }
             else{
@@ -56,23 +58,6 @@ const PostSidebar = () => {
                     {   formik.errors.search &&
                                 formik.touched.search &&
                                 (<span className='text-danger'>{formik.errors.search}</span>) }
-                        {/* <form onSubmit={ ()=>{debugger}}>
-                            <input
-                                required=""
-                                className="form-control"
-                                placeholder="Search post"
-                                type="text"
-                                value={search}
-                                onChange={(e) => {setSearch(e.target.value)}}
-                            />
-                            <button
-                                type="submit"
-                                title="Subscribe"
-                                className="btn icon_search"
-                            >
-                                <i className="ion-ios-search-strong" />
-                            </button>
-                        </form> */}
                     </div>
                 </div>
             <div className="widget">
@@ -161,19 +146,7 @@ const PostSidebar = () => {
                 </li>
                 </ul>
             </div>
-            <div className="widget">
-                <h5 className="widget_title">tags</h5>
-                <div className="tags">
-                <a href="#">General</a>
-                <a href="#">Design</a>
-                <a href="#">jQuery</a>
-                <a href="#">Branding</a>
-                <a href="#">Modern</a>
-                <a href="#">Blog</a>
-                <a href="#">Quotes</a>
-                <a href="#">Advertisement</a>
-                </div>
-            </div>
+            <PostTags/>
             </div>
         </div>
     )

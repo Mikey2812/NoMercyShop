@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changePage } from '../../actions/posts';
+import { changePage } from '../../redux/actions/posts';
 
 const Paging = () => {
     const {numOfPages, page} = useSelector(state=>state.posts);
@@ -46,7 +46,7 @@ const Paging = () => {
                         </button>
                     </li>
                     {renderPageItems()}
-                    <li className={`page-item${page === numOfPages ? ' disabled' : ''}`}>
+                    <li className={`page-item${page === numOfPages || numOfPages === 0 ? ' disabled' : ''}`}>
                         <button className="page-link" onClick={()=>{prevPage()}}>
                             <i className="linearicons-arrow-right" />
                         </button>

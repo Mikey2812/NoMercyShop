@@ -10,37 +10,40 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
     const createPost = async (req, res) => {
         const created_By = req.user.Account_Id;
-        const data = await Post.create(req.body);
+        const post = await Post.create(req.body);
         let avatar = req.files.avatar;
-        const imagePath = path.join(__dirname, '../../public/uploads/posts/' + `${data._id}.jpg`);
+        const imagePath = path.join(__dirname, '../../public/uploads/posts/' + `${post._id}.jpg`);
         await avatar.mv(imagePath);
-        data.avatar = `${data._id}.jpg`;
-        data.created_By = created_By;
-        data.save();
-        res.status(StatusCodes.CREATED).json({ data, message: 'Success' });
+        post.avatar = `${post._id}.jpg`;
+        post.created_By = created_By;
+        post.save();
+        res.status(StatusCodes.CREATED).json({ post, message: 'Create post successful' });
     };
 
     const getAllPosts = async (req, res) => {
-        const page = Number(req.query.page) || 1;
-        const limit = Number(req.query.limit) || 10;
-        const skip = (page - 1) * limit;
-        // const search = req.query.search || '';
-        const userlogin = req.query.userlogin || '';
-        let filter = {}
-        const status = req.query.status;
+
+        let filter = {};
+        const { status, search, userlogin } = req.query;
         if(status){
             filter.status = status;
         }
-        const search = req.query.search;
         if (search) {
             filter.title = {
               $regex: search,
               $options: 'iu',
             };
-          }
-        const values = await Post.find(filter).collation({ locale: 'vi', strength: 2 }).sort({ updatedAt: -1 }).skip(skip).limit(limit).lean();
+        }
+        const result = Post.find(filter).sort({ updatedAt: -1 }).lean();
+
+        // Pagination
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        const values = await result.skip(skip).limit(limit).exec();
+
+        //Check like
         for (const value of values) {
-            if (userlogin !== ''){
+            if (userlogin && userlogin !== ''){
                 const liked = await Like.findOne({
                     postId: value._id,
                     userId: userlogin,
@@ -49,17 +52,56 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
                 value.isLiked = liked ? true : false;
             }
             else {
-
                 value.isLiked = false;
             }
         }
-        // const values = await Post.find({name: { $regex: search, $options: 'i' }}).skip(skip).limit(limit);
-        const totalValues = await Post.countDocuments({});
-        const numOfPages = Math.ceil( totalValues / limit);
-        // const totalValues = values.length;
-        // const numOfPages = Math.ceil( values.length / limit );
+
+        const totalValues = await Post.countDocuments(filter);
+        const numOfPages = Math.ceil(totalValues / limit);
+
         res.status(StatusCodes.OK).json({ values, totalValues, numOfPages});
     };
+
+    // const getAllPosts = async (req, res) => {
+    //     const page = Number(req.query.page) || 1;
+    //     const limit = Number(req.query.limit) || 10;
+    //     const skip = (page - 1) * limit;
+    //     // const search = req.query.search || '';
+    //     const userlogin = req.query.userlogin || '';
+    //     let filter = {}
+    //     const status = req.query.status;
+    //     if(status){
+    //         filter.status = status;
+    //     }
+    //     const search = req.query.search;
+    //     if (search) {
+    //         filter.title = {
+    //           $regex: search,
+    //           $options: 'iu',
+    //         };
+    //       }
+    //     const values = await Post.find(filter).collation({ locale: 'vi', strength: 2 }).sort({ updatedAt: -1 }).skip(skip).limit(limit).lean();
+    //     for (const value of values) {
+    //         if (userlogin !== ''){
+    //             const liked = await Like.findOne({
+    //                 postId: value._id,
+    //                 userId: userlogin,
+    //                 type: 0,
+    //             });
+    //             value.isLiked = liked ? true : false;
+    //         }
+    //         else {
+
+    //             value.isLiked = false;
+    //         }
+    //     }
+    //     //BAD CODE WAY
+    //     const result = await Post.find(filter).collation({ locale: 'vi', strength: 2 });
+    //     const totalValues = result.length;
+    //     const numOfPages = Math.ceil( totalValues / limit);
+    //     // const totalValues = await Post.countDocuments({});
+    //     res.status(StatusCodes.OK).json({ values, totalValues, numOfPages});
+    // };
 
     const getPostByID = async (req, res) => {
         const id = req.params.id;

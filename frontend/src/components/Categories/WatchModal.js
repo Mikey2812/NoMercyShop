@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAppContext } from '../../contexts/appContext';
+import { useAppContext } from '../../contexts/contexts/appContext'
 
 const WatchModal = () => {
     const { modalData } = useAppContext();

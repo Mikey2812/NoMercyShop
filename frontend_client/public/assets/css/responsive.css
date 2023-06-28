@@ -297,12 +297,14 @@
 	margin-top: 0px;
 	pointer-events: auto;
 }
+.profile_dropdown:hover > .dropdown-menu, 
 .cart_dropdown:hover > .dropdown-menu {
 	display: block !important;
 	opacity: 1 !important;
 	visibility: visible !important;
 	margin-top: 0px !important;
 }
+.profile_dropdown:hover > .dropdown-menu,
 .cart_dropdown:hover > .dropdown-menu.cart_box {
 	-webkit-transform: scale(1) !important;
 	transform: scale(1) !important;

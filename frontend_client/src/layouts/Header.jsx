@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../actions/auth';
+import { logout } from '../redux/actions/auth';
 import { toast } from 'react-toastify';
 
 const Header = () => {
@@ -15,21 +15,22 @@ const Header = () => {
     }
     const profile = () => {
         return (
-            <li className="dropdown cart_dropdown">
-                <img className='rounded-circle' 
-                    style={{maxWidth:'60px', padding:'10px'}} 
+            <li className="dropdown profile_dropdown">
+                <img className='avatar-header rounded-circle ms-2' 
                     src={ user?.avatar || '/assets/images/avatar_default.jpg' }>
                 </img>
                 <div className="position-absolute dropdown-menu dropdown-menu-right start-auto end-0"
-                    style={{transition: 'all 0.25s ease-in-out', transform: 'scale(0) !important', transformOrigin: 'calc(100% - 30px) 0'}}>
-                    <ul className='list-unstyled' style={{maxWidth: "10rem"}}>
+                    style={{minWidth:'160px'}}>
+                    <ul className='list-unstyled'>
                         <li>
-                            <Link to='/profile' className="dropdown-item nav-link nav_item" style={{padding:'8px 20px'}}>
-                                Profile
-                            </Link>
+                            <div>    
+                                <Link to='/profile' className="dropdown-item profile-item nav-link nav_item py-2 ps-2 text-center">
+                                    Profile
+                                </Link>
+                            </div>
                         </li>
                         <li>
-                            <button className="dropdown-item nav-link nav_item" style={{padding:'8px 20px'}} onClick={(()=>
+                            <button className="dropdown-item profile-item nav-link nav_item py-2 ps-2 text-center" onClick={(()=>
                                 handleLogout()
                             )}>
                                 Logout
@@ -131,7 +132,7 @@ const Header = () => {
                         />
                         <img
                         className="logo_dark"
-                        src="/assets/images/logo_dark.png"
+                        src="/assets/images/logo_dark.svg"
                         alt="logo"
                         />
                     </Link>

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useAppContext } from '../../contexts/appContext';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useAppContext } from '../../contexts/contexts/appContext';
+import {toast} from 'react-toastify'
 let initialState = {
     name: '',
 };
