@@ -18,8 +18,10 @@ import Post from '../pages/Post/Post';
 import PostWatch from '../pages/Post/PostWatch';
 import PostAction from '../pages/Post/PostAction';
 import DashBoard from '../pages/Dashboard/DashBoard';
-
+import TopicAction from '../pages/Topic/TopicAction';
+import { TopicsProvider } from '../contexts/contexts/topicsContext';
 import { PostsProvider } from '../contexts/contexts/postsContext';
+import Topic from '../pages/Topic/Topic';
 const AdminRouter = () => {
 
     return (
@@ -35,6 +37,17 @@ const AdminRouter = () => {
                             {/* <Route path="users" element={<User />} />
                             <Route path="categories" element={<Category/>} />
                             <Route path='products' element={<Product/>} /> */}
+                            <Route path='topics/*' element={
+                                <TopicsProvider>
+                                    <Routes>
+                                        <Route index element={<Topic />} />
+                                        <Route path="add" element={<TopicAction/>} />
+                                        <Route path=':id' element={<PostWatch />} />
+                                        <Route path='edit/:id' element={<PostAction />} />
+                                    </Routes>
+                                </TopicsProvider>
+                            }/>
+                            
                             <Route path='posts/*' element={
                                 <PostsProvider>
                                     <Routes>

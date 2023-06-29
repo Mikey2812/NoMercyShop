@@ -1,9 +1,10 @@
 import {
-    GET_DATAS_BEGIN, GET_DATAS_SUCCESS, GET_DATAS_ERROR, INCREMENT_LIKE_POST, DECREMENT_LIKE_POST, GET_RECENT_POST, CHANGEPAGE
+    GET_DATAS_BEGIN, GET_DATAS_SUCCESS, GET_DATAS_ERROR, INCREMENT_LIKE_POST, DECREMENT_LIKE_POST, GET_RECENT_POST, CHANGEPAGE, GET_TOPICS_SUCCESS
 } from "./types"
 
 import PostService from "../../api/post.service";
 import LikeService from "../../api/like.service";
+import TopicService from "../../api/topic.service";
 
     export const getPosts = (filter, page) => async (dispatch) => {
         try {
@@ -86,6 +87,21 @@ import LikeService from "../../api/like.service";
     export const changePage = (newPage) => async (dispatch) => {
         try {
             dispatch({ type: CHANGEPAGE, payload: { newPage: newPage } });
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    export const getAllTopics = () => async(dispatch) => {
+        try {
+            const res = await TopicService.getTopics();
+            dispatch({
+                type: GET_TOPICS_SUCCESS,
+                payload: { 
+                    topics: res.data.values,
+                },
+            });
         }
         catch (err) {
             console.log(err);

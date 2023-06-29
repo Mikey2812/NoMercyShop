@@ -4,6 +4,16 @@ import slug from 'mongoose-slug-generator';
 mongoose.plugin(slug);
     const PostSchema = new mongoose.Schema({
         created_By: {type: String},
+        topic: {
+            topic_id: {
+                type: String,
+                required: [true, 'Please provide topic_id'], 
+            },
+            topic_name: {
+                type: String,
+                required: [true, 'Please provide topic_name'], 
+            }
+        },
         title: {
             type: String,
             required: [true, 'Please provide title'], 

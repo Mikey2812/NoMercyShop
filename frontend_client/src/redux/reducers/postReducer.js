@@ -1,8 +1,8 @@
 import {
-    GET_DATAS_BEGIN, GET_DATAS_SUCCESS, GET_DATAS_ERROR, INCREMENT_LIKE_POST, DECREMENT_LIKE_POST, GET_RECENT_POST, CHANGEPAGE
+    GET_DATAS_BEGIN, GET_DATAS_SUCCESS, GET_DATAS_ERROR, INCREMENT_LIKE_POST, DECREMENT_LIKE_POST, GET_RECENT_POST, CHANGEPAGE, GET_TOPICS_SUCCESS
 } from "../actions/types";
     
-    const initialState = { isLoading: false, values: [], recentPosts:[], page: 1, limit: 5 };
+    const initialState = { isLoading: false, values: [], recentPosts:[], topics:[], page: 1, limit: 5 };
   
     export default function (state = initialState, action) {
         const { type, payload } = action;
@@ -53,6 +53,11 @@ import {
                 return {
                     ...state,
                     page: payload.newPage,
+                }
+            case GET_TOPICS_SUCCESS:
+                return {
+                    ...state,
+                    topics: payload.topics,
                 }
             default:
                 return state;

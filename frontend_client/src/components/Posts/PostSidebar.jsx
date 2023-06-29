@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import RecentPost from './RecentPost';
-import { getRecentPost, changePage } from '../../redux/actions/posts';
+import { getRecentPost, changePage, getAllTopics } from '../../redux/actions/posts';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import PostTags from './PostTags';
+import { Link } from 'react-router-dom';
 
 const PostSidebar = () => {
-    const { recentPosts } = useSelector(state => state.posts);
+    const { recentPosts, topics } = useSelector(state => state.posts);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(()=>{
         dispatch(getRecentPost());
     },[]);
+
+    useEffect(()=>{
+        dispatch(getAllTopics());
+    })
     const formik = useFormik({
         initialValues: {
             search: '',
@@ -71,38 +76,18 @@ const PostSidebar = () => {
                 </ul>
             </div>
             <div className="widget">
-                <h5 className="widget_title">Archive</h5>
+                <h5 className="widget_title">Topic</h5>
                 <ul className="widget_archive">
-                <li>
-                    <a href="#">
-                    <span className="archive_year">June 2019</span>
-                    <span className="archive_num">(12)</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                    <span className="archive_year">May 2019</span>
-                    <span className="archive_num">(5)</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                    <span className="archive_year">March 2018</span>
-                    <span className="archive_num">(6)</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                    <span className="archive_year">January 2018</span>
-                    <span className="archive_num">(7)</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                    <span className="archive_year">April 2017</span>
-                    <span className="archive_num">(10)</span>
-                    </a>
-                </li>
+                {
+                    topics.map(topic => (
+                        <li key={topic.name}>
+                            <Link to={`/topics/${topic._id}`}>
+                                <span className="archive_year">{topic.name}</span>
+                                <span className="archive_num">({topic.numberPost})</span>
+                            </Link>
+                        </li>
+                    ))
+                }
                 </ul>
             </div>
             <div className="widget">

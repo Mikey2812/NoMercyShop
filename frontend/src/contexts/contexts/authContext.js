@@ -4,9 +4,8 @@ import reducer from '../reducers/reducer';
 import { toast } from 'react-toastify';
 
 import {
-    LOGIN_BEGIN,
+    IS_LOADING, NOT_LOADING,
     LOGIN_SUCCESS,
-    LOGIN_ERROR,
     LOGOUT_USER,
 } from '../constants/index';
 
@@ -20,29 +19,9 @@ export const initialState = {
     const AuthProvider = ({ children }) => {
 
         const [state, dispatch] = useReducer(reducer, initialState);
-        // axios
-        // const authFetch = axios.create({
-        //     baseURL: process.env.REACT_APP_API_URL,
-        //     headers: {
-        //         Authorization: `Bearer ${state.token}`,
-        //     },
-        // });
-        // // response
-        // authFetch.interceptors.response.use(
-        //     (response) => {
-        //         return response;
-        //     },
-        //     (error) => {
-        //             // console.log(error.response);
-        //         if (error.response.status === 401) {
-        //             console.log('AUTH ERROR');
-        //         }
-        //         return Promise.reject(error);
-        //     }
-        // );
 
         const login = async (data) => {
-            dispatch({ type: LOGIN_BEGIN });
+            dispatch({ type: IS_LOADING });
             try {
                 const response = await AuthService.login(data); 
                 const { user, token, message } = response.data;
@@ -54,7 +33,7 @@ export const initialState = {
                 toast.success(message);
             } catch (error) {
                 dispatch({
-                    type: LOGIN_ERROR,
+                    type: NOT_LOADING,
                 });
                 const message = error.response.data.message;
                 if(message) {

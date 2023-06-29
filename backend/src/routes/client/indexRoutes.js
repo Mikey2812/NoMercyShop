@@ -7,6 +7,7 @@ import { getAllPosts, getPostByID} from '../../controllers/postController.js';
 import { createComment, deleteComment, deleteCommentByPath, editCommentByID, getCommentByPostID} from '../../controllers/commentController.js'
 import { createLike, deleteLike } from '../../controllers/likeController.js';
 import { sendEmail } from '../../controllers/mailController.js';
+import { getTopics } from '../../controllers/topicController.js';
 
 router.post('/login', login);
 router.post('/register', register);
@@ -14,6 +15,8 @@ router.post('/register', register);
 router.get('/posts', getAllPosts);
 router.get('/posts/:postId/comments', getCommentByPostID);
 router.get('/posts/:id', getPostByID);
+
+router.get('/topics', getTopics);
 
 router.post('/comments', auth, createComment);
 router.patch('/comments/:id', auth, editCommentByID);

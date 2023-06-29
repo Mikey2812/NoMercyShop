@@ -1,25 +1,25 @@
 import {React, memo, useContext, useEffect} from 'react';
 import PageBtnContainer from '../Paging/PageBtnContainer';
-import Post from './Post';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { PostsContext } from '../../contexts/contexts/postsContext';
+import { TopicsContext } from '../../contexts/contexts/topicsContext';
+import Topic from './Topic';
 
-const PostsContainer = () => {
+const TopicsContainer = () => {
 
     const navigate = useNavigate();
-    const {isLoading, datas, getPosts, numberDatas, numOfPages, limit, page, changePage} = useContext(PostsContext);
+    const {isLoading, datas, getTopics, numberDatas, numOfPages, limit, page, changePage} = useContext(TopicsContext);
 
     useEffect(() => {
-        getPosts();
+        getTopics();
     }, [page]);
 
     return (
         <div>
             <div className="card">
                 <div className="card-header">
-                    <h3 className="card-title">List Product</h3>
+                    <h3 className="card-title">List Topics</h3>
                     <div className="card-tools">
                         <div
                             className="input-group input-group-sm"
@@ -40,7 +40,7 @@ const PostsContainer = () => {
                     </div>
                 </div>
                 <div className='d-flex justify-content-end m-3'>
-                    <button className='btn btn-outline-primary' onClick={() => { navigate('/posts/add') }}>
+                    <button className='btn btn-outline-primary' onClick={() => { navigate('/topics/add') }}>
                         <FontAwesomeIcon icon={faPlus} />
                     </button>
                 </div>
@@ -48,15 +48,13 @@ const PostsContainer = () => {
                     <table className="table table-bordered table-hover text-wrap text-center align-middle">
                     <thead>
                         <tr>
-                            <th style={{ width: "7%" }}>ID</th>
-                            <th style={{ width: "8%" }}>Topic Name</th>
-                            <th style={{ width: "15%" }}>Title</th>
-                            <th style={{ width: "15%" }}>Slug</th>
-                            <th style={{ width: "10%" }}>Description</th>
-                            <th style={{ width: "10%" }}>Content</th>
-                            <th style={{ width: "15%" }}>Image</th>
-                            <th style={{ width: "5%" }}>Status</th>
-                            <th style={{ width: "15%" }}>Action</th>
+                            <th style={{ width: "10%" }}>ID</th>
+                            <th style={{ width: "20%" }}>Name</th>
+                            <th style={{ width: "10%" }}>Number Post</th>
+                            <th style={{ width: "10%" }}>Status</th>
+                            <th style={{ width: "20%" }}>Created At</th>
+                            <th style={{ width: "20%" }}>Updated At</th>
+                            <th style={{ width: "10%" }}>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,9 +62,9 @@ const PostsContainer = () => {
                             isLoading ? 
                             (<tr><td colSpan={8}>Loading</td></tr>) : 
                             numberDatas === 0 ?
-                            (<tr><td colSpan={8}>No more post</td></tr>) :
-                            datas?.map((post) => {
-                                 return <Post key={post._id} {...post} />;
+                            (<tr><td colSpan={8}>No more topics</td></tr>) :
+                            datas?.map((data) => {
+                                 return <Topic key={data._id} {...data} />;
                             })
                         }
                     </tbody>
@@ -78,4 +76,4 @@ const PostsContainer = () => {
     )
 }
 
-export default memo (PostsContainer)
+export default memo (TopicsContainer)

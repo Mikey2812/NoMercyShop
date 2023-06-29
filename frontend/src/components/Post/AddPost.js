@@ -2,15 +2,16 @@ import React, { useContext, useEffect, useState } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useNavigate } from 'react-router-dom';
-import { useFormik } from 'formik';
+import { useFormik, } from 'formik';
 import * as Yup from "yup";
 import { PostsContext } from '../../contexts/contexts/postsContext';
 
 const AddPost = () => { 
-    const {isLoading, createPost} = useContext(PostsContext); 
+    const {isLoading, createPost, getAllTopics, topics_list } = useContext(PostsContext); 
     const formik = useFormik({
         initialValues: {
             title: '',
+            topic: '',
             description: '',
             content: '',
             avatar: null,
@@ -24,9 +25,12 @@ const AddPost = () => {
             content: Yup.string()
                 .required("Content is required!"),
             avatar: Yup.mixed().required('Avatar is required!'), 
+            topic: Yup.string()
+                .required("Topic is required!"),
         }),
         onSubmit: async values => {
             const formData = new FormData();
+            formData.append('topic', values.topic);
             formData.append('title', values.title);     
             formData.append('description', values.description);     
             formData.append('content', values.content);     
@@ -35,11 +39,34 @@ const AddPost = () => {
         }
     });  
     const navigate = useNavigate();
-    
+    useEffect(()=>{
+        getAllTopics();
+    },[]);
     return (
         <div>
             <form onSubmit={formik.handleSubmit}>
                 <div className="card-body">
+                    <div className="form-group">
+                        <label>Topic name</label>
+                        <select
+                            className="form-select"
+                            name="topic"
+                            value={formik.values.topic}
+                            onChange={formik.handleChange}
+                        >
+                            <option value="">Open this select menu</option>
+                            {
+                                topics_list.map((topic) => (
+                                    <option value={topic._id} key={topic._id}>
+                                        {topic.name}
+                                    </option>
+                                ))
+                            }
+                        </select>
+                        {formik.errors.topic && formik.touched.topic && (
+                            <p className='text-danger'>{formik.errors.topic}</p>
+                        )}
+                    </div>
                     <div className="form-group">
                         <label htmlFor="exampleInputEmail1">Title</label>
                         <input

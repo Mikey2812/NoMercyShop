@@ -7,12 +7,12 @@ import { PostsContext } from '../../contexts/contexts/postsContext';
 const FormDisabled = () => {
     const params = useParams();
     const navigate = useNavigate();
-    const { getPostByID, post, isLoading } = useContext(PostsContext);
+    const { getPostByID, data, isLoading } = useContext(PostsContext);
     useEffect(()=>{
         getPostByID(params.id);
     },[]);
     return (
-        post &&
+        data &&
         <form>
             <div className="card-body">
                 <div className="form-group">
@@ -23,7 +23,7 @@ const FormDisabled = () => {
                         placeholder="Enter title"
                         name='title'
                         disabled
-                        value={post._id}
+                        value={data._id}
                     />
                 </div>
                 <div className="form-group">
@@ -34,7 +34,7 @@ const FormDisabled = () => {
                         placeholder="Enter title"
                         name='title'
                         disabled
-                        value={post.title}
+                        value={data.title}
                     />
                 </div>
                 <div className="form-group">
@@ -44,7 +44,7 @@ const FormDisabled = () => {
                         className="form-control"
                         name='slug'
                         disabled
-                        value={post.slug}
+                        value={data.slug}
                     />
                 </div>
                 <div className="form-group">
@@ -55,7 +55,7 @@ const FormDisabled = () => {
                         placeholder="Enter ..."
                         name="description"
                         disabled
-                        value={post.description}
+                        value={data.description}
                         >
                     </textarea>
                 </div>
@@ -64,13 +64,13 @@ const FormDisabled = () => {
                     <CKEditor
                         editor={ ClassicEditor }
                         disabled
-                        data={ post.content}
+                        data={ data.content}
                     />
                 </div>
                 <div className="form-group">
                     <label htmlFor="exampleInputFile">Avatar</label>
                     <div className='d-flex justify-content-center'>
-                        <img src={`${process.env.REACT_APP_IMG_URL}/posts/${post.avatar}`} className='mw-100'/>
+                        <img src={`${process.env.REACT_APP_IMG_URL}/posts/${data.avatar}`} className='mw-100'/>
                     </div>
                 </div>
                 <div className='row'>
@@ -81,7 +81,7 @@ const FormDisabled = () => {
                             className="form-control"
                             name='status'
                             disabled
-                            value={post.status}
+                            value={data.status}
                         />
                     </div>
                     <div className='col-3'>
@@ -91,7 +91,7 @@ const FormDisabled = () => {
                             className="form-control"
                             name='view'
                             disabled
-                            value={post.view}
+                            value={data.view}
                         />
                     </div>
                     <div className='col-3'>
@@ -101,7 +101,7 @@ const FormDisabled = () => {
                             className="form-control"
                             name='number_like'
                             disabled
-                            value={post.number_like}
+                            value={data.number_like}
                         />
                     </div>
                     <div className='col-3'>
@@ -111,7 +111,7 @@ const FormDisabled = () => {
                             className="form-control"
                             name='number_comment'
                             disabled
-                            value={post.number_comment}
+                            value={data.number_comment}
                         />
                     </div>
                 </div>
@@ -123,7 +123,7 @@ const FormDisabled = () => {
                             className="form-control"
                             name='createdAt'
                             disabled
-                            value={post.createdAt}
+                            value={data.createdAt}
                         />
                     </div>
                     <div className='col-6'>
@@ -133,7 +133,7 @@ const FormDisabled = () => {
                             className="form-control"
                             name='updatedAt'
                             disabled
-                            value={post.updatedAt}
+                            value={data.updatedAt}
                         />
                     </div>
                 </div>

@@ -7,13 +7,22 @@ import { useFormik } from 'formik';
 import * as Yup from "yup";
 
 const EditPost = () => {    
+    const { getPostByID, data, isLoading, editPost, getAllTopics, topics_list } = useContext(PostsContext);
     const params = useParams();
     const navigate = useNavigate();
-    const { getPostByID, post, isLoading, editPost } = useContext(PostsContext);
+
+    useEffect(()=>{
+        getPostByID(params.id);
+    },[]);
+
+    useEffect(()=>{
+        getAllTopics();
+    },[]);
 
     const formik = useFormik({
         initialValues: {
             title: '',
+            topic: '',
             description: '',
             content: '',
             avatar: null,
@@ -26,10 +35,12 @@ const EditPost = () => {
                 .required("Description is required!"),    
             content: Yup.string()
                 .required("Content is required!"),
-            // avatar: Yup.mixed().required('Avatar is required!'), 
+            topic: Yup.string()
+                .required("Topic is required!"),
         }),
         onSubmit: async values => {
             const formData = new FormData();
+            formData.append('topic', values.topic);
             formData.append('title', values.title);     
             formData.append('description', values.description);     
             formData.append('content', values.content);     
@@ -41,24 +52,44 @@ const EditPost = () => {
     }); 
 
     useEffect(()=>{
-        getPostByID(params.id);
-    },[]);
-
-    useEffect(()=>{
-        if(post) {
+        if(data) {
             formik.setValues({
-                title: post.title,
-                description: post.description,
-                content: post.content,
+                title: data.title,
+                description: data.description,
+                content: data.content,
                 avatar: null,
                 avatarPreview: '',
             });
         }
-    },[post]);
+    },[data]);
     return (
         !isLoading &&
         <form onSubmit={formik.handleSubmit}>
             <div className="card-body">
+                <div className="form-group">
+                    <label>Topic name</label>
+                    <select
+                        className="form-select"
+                        name="topic"
+                        value={formik.values.topic}
+                        onChange={formik.handleChange}
+                    >
+                        <option value="">Open this select menu</option>
+                        {topics_list.map((topic) => (
+                            <option
+                                value={topic._id}
+                                key={topic._id}
+                            >
+                                {topic.name}
+                            </option>
+                        ))}
+                    </select>
+
+
+                    {formik.errors.topic && formik.touched.topic && (
+                        <p className='text-danger'>{formik.errors.topic}</p>
+                    )}
+                </div>
                 <div className="form-group">
                     <label htmlFor="exampleInputEmail1">Title</label>
                     <input
@@ -128,11 +159,11 @@ const EditPost = () => {
                         </div>
                     </div>
                 )}
-                {post &&
+                {data &&
                     <div>
                         <h6 className='font-weight-bold'>Old Image</h6>
                         <div className='d-flex justify-content-center'>
-                            <img src={`${process.env.REACT_APP_IMG_URL}/posts/${post.avatar}`} alt="Avatar Preview" 
+                            <img src={`${process.env.REACT_APP_IMG_URL}/posts/${data.avatar}`} alt="Avatar Preview" 
                                 style={{ maxWidth: '300px' }} 
                             />
                         </div>
